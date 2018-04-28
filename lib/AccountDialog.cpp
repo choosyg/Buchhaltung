@@ -6,6 +6,7 @@
 AccountDialog::AccountDialog( AccountPtr account, QList< AccountPtr >& accounts, QWidget* parent )
     : QDialog( parent ), ui( new Ui::AccountDialog ), account_( account ), accounts_( accounts ) {
     ui->setupUi( this );
+    setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
 
     ui->nameLineEdit->setText( account->name() );
     if( account->type() == Account::Type::Internal ) {
@@ -14,7 +15,7 @@ AccountDialog::AccountDialog( AccountPtr account, QList< AccountPtr >& accounts,
         ui->externalRadioButton->setChecked( true );
     }
 
-    ui->balanceLabel->setText( account->balance().toString() );
+    ui->balanceLabel->setText( formatCents( account->balance() ) );
 
     for( const auto& transfer : account->transferShares() ) {
         transferModel_.addTransfer( transfer );

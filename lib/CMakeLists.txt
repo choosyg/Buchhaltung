@@ -1,7 +1,3 @@
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-
 set( UIS
     AccountDialog.ui
     MainWindow.ui
@@ -17,8 +13,6 @@ add_library( buchhaltungLib
     AccountDialog.cpp
     AccountOverviewTableModel.h
     AccountOverviewTableModel.cpp
-    Amount.h
-    Amount.cpp
     MainWindow.h
     MainWindow.cpp
     Model.h
@@ -39,7 +33,6 @@ target_compile_definitions( buchhaltungLib PRIVATE _WIN32_WINNT=0x0501)
 
 add_executable( buchhaltungTest
     Account.test.cpp
-    Amount.test.cpp
     TransferShare.test.cpp
     )
 target_link_libraries( buchhaltungTest

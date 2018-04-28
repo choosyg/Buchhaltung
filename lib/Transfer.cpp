@@ -1,7 +1,6 @@
 #include "Transfer.h"
 
-Transfer::Transfer( QDate date, QString desc, const Amount& amount )
-    : date_( date ), description_( desc ), amount_( amount ) {
+Transfer::Transfer( QDate date, QString desc, int cents ) : date_( date ), description_( desc ), cents_( cents ) {
 }
 
 const QDate& Transfer::date() const {
@@ -12,8 +11,8 @@ const QString& Transfer::description() const {
     return description_;
 }
 
-const Amount& Transfer::amount() const {
-    return amount_;
+int Transfer::cents() const {
+    return cents_;
 }
 
 void Transfer::setDate( const QDate& date ) {
@@ -24,6 +23,10 @@ void Transfer::setDescription( const QString& description ) {
     description_ = description;
 }
 
-void Transfer::setAmount( const Amount& amount ) {
-    amount_ = amount;
+void Transfer::setCens( int cents ) {
+    cents_ = cents;
+}
+
+QString formatCents( int cents ) {
+    return QString().sprintf( "%+.2f€", cents / 100.0 );
 }

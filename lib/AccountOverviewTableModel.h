@@ -19,7 +19,7 @@ public:
 private:
     class AccountOverview {
     public:
-        Amount balance;
+        QString balance;
         QString name;
         AccountPtr account;
     };

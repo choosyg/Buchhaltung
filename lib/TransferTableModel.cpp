@@ -48,7 +48,7 @@ QVariant TransferTableModel::data( const QModelIndex& index, int role ) const {
                 return transfers_[index.row()]->transfer()->description();
                 break;
             case 2:
-                return transfers_[index.row()]->amount().toString();
+                return formatCents( transfers_[index.row()]->cents() );
                 break;
         }
     }
@@ -62,7 +62,7 @@ QVariant TransferTableModel::data( const QModelIndex& index, int role ) const {
                 return transfers_[index.row()]->transfer()->description();
                 break;
             case 2:
-                return transfers_[index.row()]->amount().amount();
+                return transfers_[index.row()]->cents() / 100.0;
                 break;
         }
     }
@@ -96,7 +96,7 @@ bool TransferTableModel::setData( const QModelIndex& index, const QVariant& valu
             transfers_[index.row()]->transfer()->setDescription( value.toString() );
             break;
         case 2:
-            transfers_[index.row()]->transfer()->setAmount( Amount( value.toDouble() ) );
+            transfers_[index.row()]->transfer()->setCens( static_cast< int >( value.toDouble() * 100.0 ) );
             break;
     }
 

@@ -6,7 +6,7 @@ class TransferShare {
 public:
     explicit TransferShare( TransferPtr transfer, double share );
 
-    Amount amount() const;
+    int cents() const;
     TransferPtr transfer() const;
     double share() const;
 

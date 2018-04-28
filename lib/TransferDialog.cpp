@@ -4,9 +4,11 @@
 TransferDialog::TransferDialog( TransferPtr transfer, QList< AccountPtr >& accounts, QWidget* parent )
     : QDialog( parent ), ui( new Ui::TransferDialog ), transfer_( transfer ), accounts_( accounts ) {
     ui->setupUi( this );
+    setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
+
     ui->calendarWidget->setSelectedDate( transfer->date() );
     ui->descriptionEdit->setText( transfer->description() );
-    ui->amountSpinBox->setValue( transfer->amount().amount() );
+    ui->amountSpinBox->setValue( transfer->cents() / 100.0 );
 
     ui->internalAccountBox->addItem( "Gemeinsam", 0 );
     size_t shareCount = 0;
@@ -48,7 +50,7 @@ void TransferDialog::accept() {
 
     transfer_->setDate( ui->calendarWidget->selectedDate() );
     transfer_->setDescription( ui->descriptionEdit->text() );
-    transfer_->setAmount( Amount( ui->amountSpinBox->value() ) );
+    transfer_->setCens( static_cast< int >( ui->amountSpinBox->value() * 100.0 ) );
 
     for( const auto& account : accounts_ ) {
         account->removeTransfer( transfer_ );
@@ -71,10 +73,6 @@ void TransferDialog::accept() {
             }
         }
     }
-
-    // If targets changed:
-    //    remove transfer from all accounts
-    //    add transfer to neccessary accounts
 
     QDialog::accept();
 }

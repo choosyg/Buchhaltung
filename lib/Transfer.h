@@ -1,27 +1,26 @@
 #pragma once
 
-#include "Amount.h"
-
 #include <QDate>
 
 #include <memory>
 
 class Transfer {
 public:
-    explicit Transfer( QDate date, QString desc, const Amount& amount );
+    explicit Transfer( QDate date, QString desc, int cents );
 
     const QDate& date() const;
     const QString& description() const;
-    const Amount& amount() const;
+    int cents() const;
 
     void setDate( const QDate& date );
     void setDescription( const QString& description );
-    void setAmount( const Amount& amount );
+    void setCens( int cents );
 
 private:
     QDate date_;
     QString description_;
-    Amount amount_;
+    int cents_;
 };
-
 typedef std::shared_ptr< Transfer > TransferPtr;
+
+QString formatCents( int cents );

@@ -15,7 +15,7 @@ public:
 
     void addTransfer( TransferPtr transfer, double share = 1.0 );
     void removeTransfer( TransferPtr transfer );
-    Amount balance() const;
+    int balance() const;
 
     const std::vector< TransferSharePtr >& transferShares() const;
     bool shares( const TransferPtr& transfer ) const;

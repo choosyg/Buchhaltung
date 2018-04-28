@@ -18,10 +18,10 @@ void Account::removeTransfer( TransferPtr transfer ) {
     transfers_.erase( it, transfers_.end() );
 }
 
-Amount Account::balance() const {
-    Amount total( 0.0 );
+int Account::balance() const {
+    int total = 0;
     for( const auto& share : transfers_ ) {
-        total += share->amount();
+        total += share->cents();
     }
     return total;
 }

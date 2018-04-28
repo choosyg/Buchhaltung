@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Buchhaltung</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/icons/money.svg</normaloff>:/icons/money.svg</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="0">
@@ -215,12 +219,31 @@
         <property name="text">
          <string>Open</string>
         </property>
+        <property name="icon">
+         <iconset resource="../resources.qrc">
+          <normaloff>:/icons/open.svg</normaloff>:/icons/open.svg</iconset>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="saveButton">
         <property name="text">
          <string>Save</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resources.qrc">
+          <normaloff>:/icons/save.svg</normaloff>:/icons/save.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="printButton">
+        <property name="text">
+         <string>Print</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resources.qrc">
+          <normaloff>:/icons/print.svg</normaloff>:/icons/print.svg</iconset>
         </property>
        </widget>
       </item>
@@ -242,6 +265,10 @@
         <property name="text">
          <string>Neuer Transfer</string>
         </property>
+        <property name="icon">
+         <iconset resource="../resources.qrc">
+          <normaloff>:/icons/transfer.svg</normaloff>:/icons/transfer.svg</iconset>
+        </property>
        </widget>
       </item>
       <item>
@@ -255,12 +282,9 @@
         <property name="text">
          <string>Rest verteilen</string>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="printButton">
-        <property name="text">
-         <string>Print</string>
+        <property name="icon">
+         <iconset resource="../resources.qrc">
+          <normaloff>:/icons/distribute.svg</normaloff>:/icons/distribute.svg</iconset>
         </property>
        </widget>
       </item>
@@ -283,6 +307,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

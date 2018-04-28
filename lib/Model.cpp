@@ -16,7 +16,7 @@ void Model::save( QString filename ) const {
         QJsonObject obj;
         obj["date"] = transfer->date().toString( "yyyy-MM-dd" );
         obj["description"] = transfer->description();
-        obj["amount"] = transfer->amount().amount();
+        obj["cents"] = transfer->cents();
         obj["id"] = QString::number( reinterpret_cast< size_t >( transfer.get() ) );
         transfers.append( obj );
     }
@@ -68,7 +68,7 @@ void Model::load( QString filename ) {
         QJsonObject obj = t.toObject();
         transfers_.append( std::make_shared< Transfer >( QDate::fromString( obj["date"].toString(), "yyyy-MM-dd" ),
                                                          obj["description"].toString(),
-                                                         Amount( obj["amount"].toDouble() ) ) );
+                                                         obj["cents"].toInt() ) );
         idToTransfer[obj["id"].toString()] = transfers_.back();
     }
 

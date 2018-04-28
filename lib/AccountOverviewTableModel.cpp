@@ -8,7 +8,7 @@ void AccountOverviewTableModel::clear() {
 
 void AccountOverviewTableModel::addAccount( const AccountPtr& account ) {
     AccountOverview overview;
-    overview.balance = account->balance();
+    overview.balance = formatCents( account->balance() );
     overview.name = account->name();
     overview.account = account;
 
@@ -43,7 +43,7 @@ QVariant AccountOverviewTableModel::data( const QModelIndex& index, int role ) c
                 return overviews_[index.row()].name;
                 break;
             case 1:
-                return overviews_[index.row()].balance.toString();
+                return overviews_[index.row()].balance;
                 break;
         }
     }

@@ -9,6 +9,11 @@ include( scripts/thirdparty.cmake )
 include(CTest)
 enable_testing()
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
 include_directories("${Buchhaltung_SOURCE_DIR}")
 add_subdirectory( lib )
 add_subdirectory( app )

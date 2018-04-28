@@ -4,6 +4,8 @@
 PrintPreviewDialog::PrintPreviewDialog( QList< AccountPtr >& accounts, QWidget* parent )
     : QDialog( parent ), ui( new Ui::PrintPreviewDialog ), accounts_( accounts ) {
     ui->setupUi( this );
+    setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
+
     for( int year = 2016; year <= QDate::currentDate().year(); ++year ) {
         ui->comboBox->addItem( QString::number( year ), year );
     }
@@ -25,28 +27,28 @@ void PrintPreviewDialog::on_comboBox_currentIndexChanged( int index ) {
 }
 
 QString PrintPreviewDialog::getReport( const AccountPtr& account, int year ) const {
-    Amount begin;
-    Amount end;
+    int begin{0};
+    int end{0};
     for( const auto& share : account->transferShares() ) {
         if( share->transfer()->date().year() < year ) {
-            begin += share->amount();
+            begin += share->cents();
         }
         if( share->transfer()->date().year() <= year ) {
-            end += share->amount();
+            end += share->cents();
         }
     }
 
     QString report;
     report += "Konto: " + account->name() + "\n";
-    report += "Kontostand am 31.12." + QString::number( year - 1 ) + ": " + begin.toString() + "\n";
+    report += "Kontostand am 31.12." + QString::number( year - 1 ) + ": " + formatCents( begin ) + "\n";
 
     for( const auto& share : account->transferShares() ) {
         if( share->transfer()->date().year() == year ) {
             report += "\t" + share->transfer()->date().toString( "yyyy-MM-dd" ) + "  "
-                      + share->transfer()->description() + "  " + share->amount().toString() + "\n";
+                      + share->transfer()->description() + "  " + formatCents( share->cents() ) + "\n";
         }
     }
 
-    report += "Kontostand am 31.12." + QString::number( year ) + ": " + end.toString() + "\n";
+    report += "Kontostand am 31.12." + QString::number( year ) + ": " + formatCents( end ) + "\n";
     return report;
 }

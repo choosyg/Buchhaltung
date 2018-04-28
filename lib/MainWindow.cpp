@@ -49,8 +49,8 @@ void MainWindow::on_saveButton_clicked() {
 }
 
 void MainWindow::updateViews() {
-    Amount internal( 0.0 );
-    Amount external( 0.0 );
+    int internal{0};
+    int external{0};
     internalOverviewTableModel_.clear();
     externalOverviewTableModel_.clear();
     for( const auto& account : model_.accounts_ ) {
@@ -63,9 +63,9 @@ void MainWindow::updateViews() {
         }
     }
 
-    ui->sumInternalLabel->setText( internal.toString() );
-    ui->sumExternalLabel->setText( external.toString() );
-    ui->divisionRestLabel->setText( ( external - internal ).toString() );
+    ui->sumInternalLabel->setText( formatCents( internal ) );
+    ui->sumExternalLabel->setText( formatCents( external ) );
+    ui->divisionRestLabel->setText( formatCents( external - internal ) );
 
     ui->numberExternalLabel->setText( QString::number( externalOverviewTableModel_.rowCount( QModelIndex() ) ) );
     ui->numberInternalLabel->setText( QString::number( internalOverviewTableModel_.rowCount( QModelIndex() ) ) );
@@ -94,7 +94,7 @@ void MainWindow::on_spreadButton_clicked() {
 }
 
 void MainWindow::on_newTransferbutton_clicked() {
-    auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "", Amount() );
+    auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "", 0 );
     TransferDialog( transfer, model_.accounts_, this ).exec();
     updateViews();
 }
