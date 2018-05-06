@@ -6,7 +6,7 @@
 #include <QtPrintSupport/QPrinter>
 #include <QPainter>
 
-PrintPreviewDialog::PrintPreviewDialog( QList< AccountPtr >& accounts, QWidget* parent )
+PrintPreviewDialog::PrintPreviewDialog( const QList< AccountConstPtr >& accounts, QWidget* parent )
     : QDialog( parent ), ui( new Ui::PrintPreviewDialog ), accounts_( accounts ) {
     ui->setupUi( this );
     setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
@@ -32,7 +32,7 @@ void PrintPreviewDialog::on_comboBox_currentIndexChanged( int index ) {
     }
 }
 
-QString PrintPreviewDialog::buildReport( const AccountPtr& account, int year ) const {
+QString PrintPreviewDialog::buildReport( const AccountConstPtr& account, int year ) const {
     int begin{0};
     int end{0};
     for( const auto& share : account->transferShares() ) {

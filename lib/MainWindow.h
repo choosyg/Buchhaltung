@@ -32,6 +32,7 @@ private slots:
 private:
     Ui::MainWindow* ui;
     Model model_;
+    int divisionRest_;
 
     QSortFilterProxyModel externalSortModel_;
     AccountOverviewTableModel externalOverviewTableModel_;

@@ -6,13 +6,13 @@ void TransferTableModel::clear() {
     endResetModel();
 }
 
-void TransferTableModel::addTransfer( const TransferSharePtr& transfer ) {
+void TransferTableModel::addTransfer( const TransferShareConstPtr& transfer ) {
     beginInsertRows( QModelIndex(), transfers_.size(), transfers_.size() );
     transfers_.push_back( transfer );
     endInsertRows();
 }
 
-TransferSharePtr TransferTableModel::transfer( const QModelIndex& index ) const {
+TransferShareConstPtr TransferTableModel::transferShare( const QModelIndex& index ) const {
     return transfers_[index.row()];
 }
 
@@ -83,28 +83,6 @@ QVariant TransferTableModel::data( const QModelIndex& index, int role ) const {
     return QVariant();
 }
 
-bool TransferTableModel::setData( const QModelIndex& index, const QVariant& value, int role ) {
-    if( !index.isValid() ) {
-        return false;
-    }
-
-    switch( index.column() ) {
-        case 0:
-            transfers_[index.row()]->transfer()->setDate( value.toDate() );
-            break;
-        case 1:
-            transfers_[index.row()]->transfer()->setDescription( value.toString() );
-            break;
-        case 2:
-            transfers_[index.row()]->transfer()->setCens( static_cast< int >( value.toDouble() * 100.0 ) );
-            break;
-    }
-
-    emit dataChanged( index, index );
-
-    return true;
-}
-
 QVariant TransferTableModel::headerData( int section, Qt::Orientation orientation, int role ) const {
     if( role != Qt::DisplayRole ) {
         return QVariant();
@@ -129,8 +107,4 @@ QVariant TransferTableModel::headerData( int section, Qt::Orientation orientatio
     }
 
     return QVariant();
-}
-
-Qt::ItemFlags TransferTableModel::flags( const QModelIndex& index ) const {
-    return QAbstractTableModel::flags( index ) | Qt::ItemIsEditable;
 }

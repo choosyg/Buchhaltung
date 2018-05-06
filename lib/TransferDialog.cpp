@@ -1,8 +1,8 @@
 #include "TransferDialog.h"
 #include "ui_TransferDialog.h"
 
-TransferDialog::TransferDialog( TransferPtr transfer, QList< AccountPtr >& accounts, QWidget* parent )
-    : QDialog( parent ), ui( new Ui::TransferDialog ), transfer_( transfer ), accounts_( accounts ) {
+TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget* parent )
+    : QDialog( parent ), ui( new Ui::TransferDialog ), model_( model ) {
     ui->setupUi( this );
     setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
 
@@ -14,7 +14,7 @@ TransferDialog::TransferDialog( TransferPtr transfer, QList< AccountPtr >& accou
     size_t shareCount = 0;
     size_t externalShareId = 0;
     size_t internalShareId = 0;
-    for( const auto& account : accounts ) {
+    for( const auto& account : model.accounts() ) {
         auto id = reinterpret_cast< size_t >( account.get() );
         if( account->type() == Account::Type::External ) {
             ui->externalAccountBox->addItem( account->name(), id );
@@ -48,31 +48,23 @@ void TransferDialog::accept() {
         return;
     }
 
-    transfer_->setDate( ui->calendarWidget->selectedDate() );
-    transfer_->setDescription( ui->descriptionEdit->text() );
-    transfer_->setCens( static_cast< int >( ui->amountSpinBox->value() * 100.0 ) );
+    auto transfer = std::make_shared< Transfer >( ui->calendarWidget->selectedDate(),
+                                                  ui->descriptionEdit->text(),
+                                                  ui->amountSpinBox->value() * 100.0 );
 
-    for( const auto& account : accounts_ ) {
-        account->removeTransfer( transfer_ );
-    }
-
-    reinterpret_cast< Account* >( ui->externalAccountBox->currentData().toULongLong() )->addTransfer( transfer_ );
-
-    if( ui->internalAccountBox->currentData().toULongLong() != 0 ) {
-        reinterpret_cast< Account* >( ui->internalAccountBox->currentData().toULongLong() )->addTransfer( transfer_ );
-    } else {
-        size_t count = 0;
-        for( const auto& account : accounts_ ) {
-            if( account->type() == Account::Type::Internal ) {
-                ++count;
-            }
+    AccountConstPtr external = nullptr;
+    AccountConstPtr internal = nullptr;
+    for( const auto& account : model_.accounts() ) {
+        auto id = reinterpret_cast< size_t >( account.get() );
+        if( id == ui->externalAccountBox->currentData().toULongLong() ) {
+            external = account;
         }
-        for( const auto& account : accounts_ ) {
-            if( account->type() == Account::Type::Internal ) {
-                account->addTransfer( transfer_, 1.0 / count );
-            }
+        if( id == ui->internalAccountBox->currentData().toULongLong() ) {
+            external = account;
         }
     }
+
+    model_.upsert( transfer, external, internal );
 
     QDialog::accept();
 }

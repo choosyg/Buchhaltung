@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Account.h"
+#include "Model.h"
 #include "Transfer.h"
 
 #include <QDialog>
@@ -13,13 +13,12 @@ class TransferDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit TransferDialog( TransferPtr transfer, QList< AccountPtr >& accounts, QWidget* parent = 0 );
+    explicit TransferDialog( TransferConstPtr transfer, Model& model, QWidget* parent = 0 );
     ~TransferDialog();
 
     void accept() override;
 
 private:
     Ui::TransferDialog* ui;
-    TransferPtr transfer_;
-    QList< AccountPtr >& accounts_;
+    Model& model_;
 };

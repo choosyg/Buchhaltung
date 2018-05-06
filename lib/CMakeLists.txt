@@ -33,6 +33,7 @@ target_compile_definitions( buchhaltungLib PRIVATE _WIN32_WINNT=0x0501)
 
 add_executable( buchhaltungTest
     Account.test.cpp
+    Model.test.cpp
     TransferShare.test.cpp
     )
 target_link_libraries( buchhaltungTest
@@ -43,5 +44,6 @@ target_link_libraries( buchhaltungTest
     ${GTEST_LIBS}
 )
 target_compile_definitions( buchhaltungTest PRIVATE _WIN32_WINNT=0x0501)
+target_compile_definitions (buchhaltungTest PRIVATE TEST_DATA="${CMAKE_SOURCE_DIR}/testdata")
 add_test(NAME buchhaltungTest COMMAND ${CMAKE_BINARY_DIR}/app/buchhaltungTest )
 

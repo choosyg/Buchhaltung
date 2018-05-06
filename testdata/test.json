@@ -1,0 +1,36 @@
+{
+    "accounts": [
+		{
+			"name":"Extern1",
+			"type":"External",
+			"shares":[
+			]
+		},
+		{
+			"name":"Extern2",
+			"type":"External",
+			"shares":[
+			]
+		},
+		{
+			"name":"Intern1",
+			"type":"Internal",
+			"shares":[
+			]
+		},
+		{
+			"name":"Intern2",
+			"type":"Internal",
+			"shares":[
+			]
+		},
+		{
+			"name":"Intern3",
+			"type":"Internal",
+			"shares":[
+			]
+		}
+	],
+    "transfers": [
+    ]
+}

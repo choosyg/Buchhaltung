@@ -3,8 +3,8 @@
 
 #include "TransferDialog.h"
 
-AccountDialog::AccountDialog( AccountPtr account, QList< AccountPtr >& accounts, QWidget* parent )
-    : QDialog( parent ), ui( new Ui::AccountDialog ), account_( account ), accounts_( accounts ) {
+AccountDialog::AccountDialog( AccountConstPtr account, Model& model, QWidget* parent )
+    : QDialog( parent ), ui( new Ui::AccountDialog ), model_( model ), account_( account ) {
     ui->setupUi( this );
     setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
 
@@ -35,8 +35,8 @@ void AccountDialog::accept() {
 
 void AccountDialog::on_tableView_doubleClicked( const QModelIndex& index ) {
     auto si = sortModel_.mapToSource( index );
-    TransferDialog( transferModel_.transfer( si )->transfer(), accounts_, this ).exec();
-    if( account_->shares( transferModel_.transfer( si )->transfer() ) ) {
+    TransferDialog( transferModel_.transferShare( si )->transfer(), model_, this ).exec();
+    if( account_->shares( transferModel_.transferShare( si )->transfer() ) ) {
         transferModel_.update( si );
     } else {
         transferModel_.remove( si );

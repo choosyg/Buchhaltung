@@ -48,57 +48,55 @@ void MainWindow::on_saveButton_clicked() {
     settings.setValue( "LastPath", QFileInfo( filename ).path() );
 }
 
+void MainWindow::on_externalOverviewTable_doubleClicked( const QModelIndex& index ) {
+    AccountDialog( externalOverviewTableModel_.account( externalSortModel_.mapToSource( index ) ), model_, this )
+        .exec();
+    updateViews();
+}
+
+void MainWindow::on_internalOverviewTable_doubleClicked( const QModelIndex& index ) {
+    AccountDialog( internalOverviewTableModel_.account( internalSortModel_.mapToSource( index ) ), model_, this )
+        .exec();
+    updateViews();
+}
+
+void MainWindow::on_spreadButton_clicked() {
+    auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "Divisionsrest", divisionRest_ );
+    model_.upsert( transfer, nullptr, nullptr );
+    updateViews();
+}
+
+void MainWindow::on_newTransferbutton_clicked() {
+    auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "", 0 );
+    TransferDialog( transfer, model_, this ).exec();
+    updateViews();
+}
+
+void MainWindow::on_printButton_clicked() {
+    PrintPreviewDialog( model_.accounts(), this ).exec();
+}
+
 void MainWindow::updateViews() {
-    int internal{0};
-    int external{0};
     internalOverviewTableModel_.clear();
     externalOverviewTableModel_.clear();
-    for( const auto& account : model_.accounts_ ) {
+    for( const auto& account : model_.accounts() ) {
         if( account->type() == Account::Type::Internal ) {
-            internal += account->balance();
             internalOverviewTableModel_.addAccount( account );
         } else {
-            external += account->balance();
             externalOverviewTableModel_.addAccount( account );
         }
     }
 
+    int internal = model_.sumBalance( Account::Type::Internal );
+    int external = model_.sumBalance( Account::Type::External );
     ui->sumInternalLabel->setText( formatCents( internal ) );
     ui->sumExternalLabel->setText( formatCents( external ) );
     ui->divisionRestLabel->setText( formatCents( external - internal ) );
+    divisionRest_ = external - internal;
 
     ui->numberExternalLabel->setText( QString::number( externalOverviewTableModel_.rowCount( QModelIndex() ) ) );
     ui->numberInternalLabel->setText( QString::number( internalOverviewTableModel_.rowCount( QModelIndex() ) ) );
 
     ui->externalOverviewTable->resizeColumnsToContents();
     ui->internalOverviewTable->resizeColumnsToContents();
-}
-
-void MainWindow::on_externalOverviewTable_doubleClicked( const QModelIndex& index ) {
-    AccountDialog( externalOverviewTableModel_.account( externalSortModel_.mapToSource( index ) ),
-                   model_.accounts_,
-                   this )
-        .exec();
-    updateViews();
-}
-
-void MainWindow::on_internalOverviewTable_doubleClicked( const QModelIndex& index ) {
-    AccountDialog( internalOverviewTableModel_.account( internalSortModel_.mapToSource( index ) ),
-                   model_.accounts_,
-                   this )
-        .exec();
-    updateViews();
-}
-
-void MainWindow::on_spreadButton_clicked() {
-}
-
-void MainWindow::on_newTransferbutton_clicked() {
-    auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "", 0 );
-    TransferDialog( transfer, model_.accounts_, this ).exec();
-    updateViews();
-}
-
-void MainWindow::on_printButton_clicked() {
-    PrintPreviewDialog( model_.accounts_, this ).exec();
 }

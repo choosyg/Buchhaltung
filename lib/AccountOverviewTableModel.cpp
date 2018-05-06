@@ -6,7 +6,7 @@ void AccountOverviewTableModel::clear() {
     endResetModel();
 }
 
-void AccountOverviewTableModel::addAccount( const AccountPtr& account ) {
+void AccountOverviewTableModel::addAccount( const AccountConstPtr& account ) {
     AccountOverview overview;
     overview.balance = formatCents( account->balance() );
     overview.name = account->name();
@@ -17,7 +17,7 @@ void AccountOverviewTableModel::addAccount( const AccountPtr& account ) {
     endInsertRows();
 }
 
-AccountPtr AccountOverviewTableModel::account( const QModelIndex& index ) const {
+AccountConstPtr AccountOverviewTableModel::account( const QModelIndex& index ) const {
     if( index.model() != this ) {
         throw std::runtime_error( "AccountOverviewTableModel::account called with wrong index" );
     }

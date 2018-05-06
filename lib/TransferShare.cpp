@@ -1,6 +1,6 @@
 #include "TransferShare.h"
 
-TransferShare::TransferShare( TransferPtr transfer, double share ) : transfer_( transfer ), share_( share ) {
+TransferShare::TransferShare( TransferConstPtr transfer, double share ) : transfer_( transfer ), share_( share ) {
 }
 
 int TransferShare::cents() const {
@@ -8,7 +8,7 @@ int TransferShare::cents() const {
     return static_cast< int >( value );
 }
 
-TransferPtr TransferShare::transfer() const {
+TransferConstPtr TransferShare::transfer() const {
     return transfer_;
 }
 

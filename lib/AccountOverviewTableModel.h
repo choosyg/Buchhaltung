@@ -8,8 +8,8 @@ class AccountOverviewTableModel : public QAbstractTableModel {
     Q_OBJECT
 public:
     void clear();
-    void addAccount( const AccountPtr& account );
-    AccountPtr account( const QModelIndex& index ) const;
+    void addAccount( const AccountConstPtr& account );
+    AccountConstPtr account( const QModelIndex& index ) const;
 
     int rowCount( const QModelIndex& parent ) const override;
     int columnCount( const QModelIndex& parent ) const override;
@@ -21,7 +21,7 @@ private:
     public:
         QString balance;
         QString name;
-        AccountPtr account;
+        AccountConstPtr account;
     };
     QList< AccountOverview > overviews_;
 };

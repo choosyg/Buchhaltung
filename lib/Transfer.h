@@ -14,7 +14,7 @@ public:
 
     void setDate( const QDate& date );
     void setDescription( const QString& description );
-    void setCens( int cents );
+    void setCents( int cents );
 
 private:
     QDate date_;
@@ -22,5 +22,6 @@ private:
     int cents_;
 };
 typedef std::shared_ptr< Transfer > TransferPtr;
+typedef std::shared_ptr< const Transfer > TransferConstPtr;
 
 QString formatCents( int cents );

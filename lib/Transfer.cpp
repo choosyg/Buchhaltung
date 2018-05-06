@@ -23,7 +23,7 @@ void Transfer::setDescription( const QString& description ) {
     description_ = description;
 }
 
-void Transfer::setCens( int cents ) {
+void Transfer::setCents( int cents ) {
     cents_ = cents;
 }
 

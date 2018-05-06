@@ -11,7 +11,7 @@ class PrintPreviewDialog;
 class PrintPreviewDialog : public QDialog {
     Q_OBJECT
 public:
-    explicit PrintPreviewDialog( QList< AccountPtr >& accounts, QWidget* parent = 0 );
+    explicit PrintPreviewDialog( const QList< AccountConstPtr >& accounts, QWidget* parent = 0 );
     ~PrintPreviewDialog();
 
 private slots:
@@ -21,8 +21,8 @@ private slots:
 
 private:
     Ui::PrintPreviewDialog* ui;
-    QList< AccountPtr >& accounts_;
+    const QList< AccountConstPtr >& accounts_;
 
-    QString buildReport( const AccountPtr& account, int year ) const;
+    QString buildReport( const AccountConstPtr& account, int year ) const;
     QStringList buildPages();
 };

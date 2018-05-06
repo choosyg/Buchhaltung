@@ -4,15 +4,16 @@
 
 class TransferShare {
 public:
-    explicit TransferShare( TransferPtr transfer, double share );
+    explicit TransferShare( TransferConstPtr transfer, double share );
 
     int cents() const;
-    TransferPtr transfer() const;
+    TransferConstPtr transfer() const;
     double share() const;
 
 private:
-    TransferPtr transfer_;
+    TransferConstPtr transfer_;
     double share_;
 };
 
 typedef std::shared_ptr< TransferShare > TransferSharePtr;
+typedef std::shared_ptr< const TransferShare > TransferShareConstPtr;

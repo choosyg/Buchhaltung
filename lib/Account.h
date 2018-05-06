@@ -13,17 +13,18 @@ public:
     Type type() const;
     const QString& name() const;
 
-    void addTransfer( TransferPtr transfer, double share = 1.0 );
-    void removeTransfer( TransferPtr transfer );
+    void addTransfer( TransferConstPtr transfer, double share = 1.0 );
+    void removeTransfer( TransferConstPtr transfer );
     int balance() const;
 
-    const std::vector< TransferSharePtr >& transferShares() const;
-    bool shares( const TransferPtr& transfer ) const;
+    const std::vector< TransferShareConstPtr >& transferShares() const;
+    bool shares( const TransferConstPtr& transfer ) const;
 
 private:
     QString name_;
     Type type_;
-    std::vector< TransferSharePtr > transfers_;
+    std::vector< TransferShareConstPtr > transfers_;
 };
 
 typedef std::shared_ptr< Account > AccountPtr;
+typedef std::shared_ptr< const Account > AccountConstPtr;
