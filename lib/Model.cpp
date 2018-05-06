@@ -124,6 +124,9 @@ QList< AccountConstPtr > Model::accounts() const {
 }
 
 void Model::upsert( TransferConstPtr transfer, AccountConstPtr external, AccountConstPtr internal ) {
+    if( external == nullptr && internal != nullptr ) {
+        throw std::exception( "Model::upsert: Tried to upsert transfer without external reference" );
+    }
     for( const auto& account : accounts_ ) {
         account->removeTransfer( transfer );
     }

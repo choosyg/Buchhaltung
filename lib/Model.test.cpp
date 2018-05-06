@@ -61,3 +61,18 @@ TEST( ModelTest, ShouldUpsertIndividualCosts ) {
     ASSERT_EQ( 1000, internal->balance() );
     ASSERT_EQ( 1000, external->balance() );
 }
+
+TEST( ModelTest, ShouldThrowOnUnintendedUpserts ) {
+    Model model;
+    model.load( QString( TEST_DATA ) + "/test.json" );
+
+    AccountConstPtr internal = nullptr;
+    for( auto& a : model.accounts() ) {
+        if( a->type() == Account::Type::Internal ) {
+            internal = a;
+        }
+    }
+
+    auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "desc", 1000 );
+    ASSERT_ANY_THROW( model.upsert( transfer, nullptr, internal ) );
+}

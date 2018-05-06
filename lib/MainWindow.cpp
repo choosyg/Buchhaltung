@@ -6,6 +6,7 @@
 #include "TransferDialog.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QSettings>
 #include <QSortFilterProxyModel>
 
@@ -61,6 +62,11 @@ void MainWindow::on_internalOverviewTable_doubleClicked( const QModelIndex& inde
 }
 
 void MainWindow::on_spreadButton_clicked() {
+    auto ans
+        = QMessageBox::question( this, "Sind sie sicher?", "Soll der Divisionsrest jetzt wirklich verteilt werden?" );
+    if( ans == QMessageBox::No ) {
+        return;
+    }
     auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "Divisionsrest", divisionRest_ );
     model_.upsert( transfer, nullptr, nullptr );
     updateViews();
