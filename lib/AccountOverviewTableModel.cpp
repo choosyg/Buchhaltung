@@ -1,5 +1,7 @@
 #include "AccountOverviewTableModel.h"
 
+#include <QColor>
+
 void AccountOverviewTableModel::clear() {
     beginResetModel();
     overviews_.clear();
@@ -8,7 +10,8 @@ void AccountOverviewTableModel::clear() {
 
 void AccountOverviewTableModel::addAccount( const AccountConstPtr& account ) {
     AccountOverview overview;
-    overview.balance = formatCents( account->balance() );
+    overview.balance = account->balance();
+    overview.balanceString = formatCents( overview.balance );
     overview.name = account->name();
     overview.account = account;
 
@@ -43,8 +46,14 @@ QVariant AccountOverviewTableModel::data( const QModelIndex& index, int role ) c
                 return overviews_[index.row()].name;
                 break;
             case 1:
-                return overviews_[index.row()].balance;
+                return overviews_[index.row()].balanceString;
                 break;
+        }
+    }
+
+    if( role == Qt::ForegroundRole ) {
+        if( overviews_[index.row()].balance < 0 ) {
+            return QColor( Qt::red );
         }
     }
 

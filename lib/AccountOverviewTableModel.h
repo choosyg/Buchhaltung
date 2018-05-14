@@ -19,8 +19,9 @@ public:
 private:
     class AccountOverview {
     public:
-        QString balance;
+        QString balanceString;
         QString name;
+        int balance;
         AccountConstPtr account;
     };
     QList< AccountOverview > overviews_;

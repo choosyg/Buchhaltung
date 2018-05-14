@@ -21,4 +21,5 @@ public:
 private:
     Ui::TransferDialog* ui;
     Model& model_;
+    TransferConstPtr transfer_;
 };

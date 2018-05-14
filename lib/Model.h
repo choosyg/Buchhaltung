@@ -14,7 +14,8 @@ public:
 
     QList< AccountConstPtr > accounts() const;
 
-    void upsert( TransferConstPtr transfer, AccountConstPtr external, AccountConstPtr internal );
+    void remove( TransferConstPtr transfer );
+    void insert( TransferConstPtr transfer, AccountConstPtr external, AccountConstPtr internal );
 
 private:
     mutable QList< AccountPtr > accounts_;

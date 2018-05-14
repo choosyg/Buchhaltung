@@ -15,7 +15,7 @@ TEST( ModelTest, ShouldUpsertDivisionRest ) {
     model.load( QString( TEST_DATA ) + "/test.json" );
 
     auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "desc", 1000 );
-    model.upsert( transfer, nullptr, nullptr );
+    model.insert( transfer, nullptr, nullptr );
     ASSERT_EQ( 999, model.sumBalance( Account::Type::Internal ) );
     ASSERT_EQ( 0, model.sumBalance( Account::Type::External ) );
 }
@@ -33,7 +33,7 @@ TEST( ModelTest, ShouldUpsertCommonCosts ) {
     }
 
     auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "desc", 1000 );
-    model.upsert( transfer, external, nullptr );
+    model.insert( transfer, external, nullptr );
     ASSERT_EQ( 999, model.sumBalance( Account::Type::Internal ) );
     ASSERT_EQ( 1000, model.sumBalance( Account::Type::External ) );
     ASSERT_EQ( 1000, external->balance() );
@@ -55,7 +55,7 @@ TEST( ModelTest, ShouldUpsertIndividualCosts ) {
     }
 
     auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "desc", 1000 );
-    model.upsert( transfer, external, internal );
+    model.insert( transfer, external, internal );
     ASSERT_EQ( 1000, model.sumBalance( Account::Type::Internal ) );
     ASSERT_EQ( 1000, model.sumBalance( Account::Type::External ) );
     ASSERT_EQ( 1000, internal->balance() );
@@ -74,5 +74,5 @@ TEST( ModelTest, ShouldThrowOnUnintendedUpserts ) {
     }
 
     auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "desc", 1000 );
-    ASSERT_ANY_THROW( model.upsert( transfer, nullptr, internal ) );
+    ASSERT_ANY_THROW( model.insert( transfer, nullptr, internal ) );
 }

@@ -2,7 +2,7 @@
 #include "ui_TransferDialog.h"
 
 TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget* parent )
-    : QDialog( parent ), ui( new Ui::TransferDialog ), model_( model ) {
+    : QDialog( parent ), ui( new Ui::TransferDialog ), model_( model ), transfer_( transfer ) {
     ui->setupUi( this );
     setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
 
@@ -54,17 +54,18 @@ void TransferDialog::accept() {
 
     AccountConstPtr external = nullptr;
     AccountConstPtr internal = nullptr;
-    for( const auto& account : model_.accounts() ) {
+    for( auto& account : model_.accounts() ) {
         auto id = reinterpret_cast< size_t >( account.get() );
         if( id == ui->externalAccountBox->currentData().toULongLong() ) {
             external = account;
         }
         if( id == ui->internalAccountBox->currentData().toULongLong() ) {
-            external = account;
+            internal = account;
         }
     }
 
-    model_.upsert( transfer, external, internal );
+    model_.remove( transfer_ );
+    model_.insert( transfer, external, internal );
 
     QDialog::accept();
 }

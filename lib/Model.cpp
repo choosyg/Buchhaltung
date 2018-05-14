@@ -49,7 +49,7 @@ void Model::save( QString filename ) const {
 
     QJsonObject global;
     global["transfers"] = transfers;
-    global["accouns"] = accounts;
+    global["accounts"] = accounts;
 
     QJsonDocument document;
     document.setObject( global );
@@ -123,13 +123,17 @@ QList< AccountConstPtr > Model::accounts() const {
     return list;
 }
 
-void Model::upsert( TransferConstPtr transfer, AccountConstPtr external, AccountConstPtr internal ) {
-    if( external == nullptr && internal != nullptr ) {
-        throw std::exception( "Model::upsert: Tried to upsert transfer without external reference" );
-    }
+void Model::remove( TransferConstPtr transfer ) {
     for( const auto& account : accounts_ ) {
         account->removeTransfer( transfer );
     }
+}
+
+void Model::insert( TransferConstPtr transfer, AccountConstPtr external, AccountConstPtr internal ) {
+    if( external == nullptr && internal != nullptr ) {
+        throw std::exception( "Model::upsert: Tried to upsert transfer without external reference" );
+    }
+    remove( transfer );
 
     if( external != nullptr ) {
         for( const auto& account : accounts_ ) {
