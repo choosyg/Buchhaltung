@@ -86,15 +86,15 @@ void MainWindow::updateViews() {
     internalOverviewTableModel_.clear();
     externalOverviewTableModel_.clear();
     for( const auto& account : model_.accounts() ) {
-        if( account->type() == Account::Type::Internal ) {
+        if( test( account->flags(), Flags::Internal ) ) {
             internalOverviewTableModel_.addAccount( account );
         } else {
             externalOverviewTableModel_.addAccount( account );
         }
     }
 
-    int internal = model_.sumBalance( Account::Type::Internal );
-    int external = model_.sumBalance( Account::Type::External );
+    int internal = model_.sumBalance( Flags::Internal );
+    int external = model_.sumBalance( Flags::External );
     ui->sumInternalLabel->setText( formatCents( internal ) );
     ui->sumExternalLabel->setText( formatCents( external ) );
     ui->divisionRestLabel->setText( formatCents( external - internal ) );

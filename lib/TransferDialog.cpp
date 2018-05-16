@@ -16,7 +16,7 @@ TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget
     size_t internalShareId = 0;
     for( const auto& account : model.accounts() ) {
         auto id = reinterpret_cast< size_t >( account.get() );
-        if( account->type() == Account::Type::External ) {
+        if( test( account->flags(), Flags::External ) ) {
             ui->externalAccountBox->addItem( account->name(), id );
             if( account->shares( transfer ) ) {
                 externalShareId = id;
@@ -48,10 +48,6 @@ void TransferDialog::accept() {
         return;
     }
 
-    auto transfer = std::make_shared< Transfer >( ui->calendarWidget->selectedDate(),
-                                                  ui->descriptionEdit->text(),
-                                                  ui->amountSpinBox->value() * 100.0 );
-
     AccountConstPtr external = nullptr;
     AccountConstPtr internal = nullptr;
     for( auto& account : model_.accounts() ) {
@@ -64,7 +60,15 @@ void TransferDialog::accept() {
         }
     }
 
+    if( external == nullptr ) {
+        return;
+    }
+
     model_.remove( transfer_ );
+
+    auto transfer = std::make_shared< Transfer >( ui->calendarWidget->selectedDate(),
+                                                  ui->descriptionEdit->text(),
+                                                  round( ui->amountSpinBox->value() * 100.0 ) );
     model_.insert( transfer, external, internal );
 
     QDialog::accept();

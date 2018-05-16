@@ -34,7 +34,7 @@ void Model::save( QString filename ) const {
     for( const auto& account : accounts_ ) {
         QJsonObject a;
         a["name"] = account->name();
-        a["type"] = account->type() == Account::Type::Internal ? "Internal" : "External";
+        a["flags"] = static_cast< int >( account->flags() );
         QJsonArray shares;
         for( const auto& share : account->transferShares() ) {
             QJsonObject s;
@@ -83,10 +83,8 @@ void Model::load( QString filename ) {
     QJsonArray accounts = document.object()["accounts"].toArray();
     for( const auto& a : accounts ) {
         QJsonObject obj = a.toObject();
-        accounts_.append( std::make_shared< Account >( obj["name"].toString(),
-                                                       obj["type"].toString() == "Internal"
-                                                           ? Account::Type::Internal
-                                                           : Account::Type::External ) );
+        accounts_.append(
+            std::make_shared< Account >( obj["name"].toString(), static_cast< Flags >( obj["flags"].toInt() ) ) );
         QJsonArray shares = obj["shares"].toArray();
         for( const auto& s : shares ) {
             QJsonObject share = s.toObject();
@@ -95,20 +93,20 @@ void Model::load( QString filename ) {
     }
 }
 
-int Model::count( Account::Type type ) const {
+int Model::count( Flags flags ) const {
     int count = 0;
     for( const auto& account : accounts_ ) {
-        if( account->type() == type ) {
+        if( test( account->flags(), flags ) ) {
             ++count;
         }
     }
     return count;
 }
 
-int Model::sumBalance( Account::Type type ) const {
+int Model::sumBalance( Flags flags ) const {
     int sum = 0;
     for( const auto& account : accounts_ ) {
-        if( account->type() == type ) {
+        if( test( account->flags(), flags ) ) {
             sum += account->balance();
         }
     }
@@ -150,9 +148,9 @@ void Model::insert( TransferConstPtr transfer, AccountConstPtr external, Account
             }
         }
     } else {
-        size_t ic = count( Account::Type::Internal );
+        size_t ic = count( Flags::Internal | Flags::Individual );
         for( const auto& account : accounts_ ) {
-            if( account->type() == Account::Type::Internal ) {
+            if( test( account->flags(), Flags::Internal | Flags::Individual ) ) {
                 account->addTransfer( transfer, 1.0 / ic );
             }
         }

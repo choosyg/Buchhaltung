@@ -1,10 +1,24 @@
 #include "Account.h"
 
-Account::Account( QString name, Type type ) : name_( name ), type_( type ) {
+#include <type_traits>
+
+Account::Account( QString name, Flags flags ) : name_( name ), flags_( flags ) {
+    if( !test( flags, Flags::Internal ) && !test( flags, Flags::External ) ) {
+        throw std::invalid_argument( "Account::C'Tor neither internal nor external account" );
+    }
+    if( test( flags, Flags::Internal ) && test( flags, Flags::External ) ) {
+        throw std::invalid_argument( "Account::C'Tor internal AND external account" );
+    }
+    if( !test( flags, Flags::Individual ) && !test( flags, Flags::Group ) ) {
+        throw std::invalid_argument( "Account::C'Tor neither group nor individual account" );
+    }
+    if( test( flags, Flags::Individual ) && test( flags, Flags::Group ) ) {
+        throw std::invalid_argument( "Account::C'Tor group AND individual account" );
+    }
 }
 
-Account::Type Account::type() const {
-    return type_;
+Flags Account::flags() const {
+    return flags_;
 }
 
 void Account::addTransfer( TransferConstPtr transfer, double share ) {
@@ -41,4 +55,18 @@ bool Account::shares( const TransferConstPtr& transfer ) const {
 
 const QString& Account::name() const {
     return name_;
+}
+
+Flags operator|( Flags a, Flags b ) {
+    using ut = std::underlying_type< Flags >::type;
+    ut at = static_cast< ut >( a );
+    ut bt = static_cast< ut >( b );
+    return static_cast< Flags >( at | bt );
+}
+
+bool test( Flags flags, Flags contained ) {
+    using ut = std::underlying_type< Flags >::type;
+    ut at = static_cast< ut >( flags );
+    ut bt = static_cast< ut >( contained );
+    return ( at & bt ) == bt;
 }

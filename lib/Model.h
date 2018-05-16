@@ -9,8 +9,8 @@ public:
     void save( QString filename ) const;
     void load( QString filename );
 
-    int count( Account::Type type ) const;
-    int sumBalance( Account::Type type ) const;
+    int count( Flags flags ) const;
+    int sumBalance( Flags flags ) const;
 
     QList< AccountConstPtr > accounts() const;
 

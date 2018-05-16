@@ -4,13 +4,15 @@
 
 #include <vector>
 
+enum class Flags { Internal = 1, External = 2, Group = 4, Individual = 8 };
+Flags operator|( Flags a, Flags b );
+bool test( Flags flags, Flags contained );
+
 class Account {
 public:
-    enum class Type { Internal, External };
+    Account( QString name, Flags flags );
 
-    Account( QString name, Type type );
-
-    Type type() const;
+    Flags flags() const;
     const QString& name() const;
 
     void addTransfer( TransferConstPtr transfer, double share = 1.0 );
@@ -22,7 +24,7 @@ public:
 
 private:
     QString name_;
-    Type type_;
+    Flags flags_;
     std::vector< TransferShareConstPtr > transfers_;
 };
 

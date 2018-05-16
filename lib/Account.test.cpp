@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 
 TEST( AccountTest, ShouldCalculateBalance ) {
-    Account account( "MyAccount", Account::Type::Internal );
+    Account account( "MyAccount", Flags::Internal | Flags::Individual );
 
     account.addTransfer( std::make_shared< Transfer >( QDate(), "", 314 ), 0.75 );
 

@@ -9,7 +9,7 @@ AccountDialog::AccountDialog( AccountConstPtr account, Model& model, QWidget* pa
     setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
 
     ui->nameLineEdit->setText( account->name() );
-    if( account->type() == Account::Type::Internal ) {
+    if( test( account->flags(), Flags::Internal ) ) {
         ui->internalRadioButton->setChecked( true );
     } else {
         ui->externalRadioButton->setChecked( true );
@@ -36,9 +36,8 @@ void AccountDialog::accept() {
 void AccountDialog::on_tableView_doubleClicked( const QModelIndex& index ) {
     auto si = sortModel_.mapToSource( index );
     TransferDialog( transferModel_.transferShare( si )->transfer(), model_, this ).exec();
-    if( account_->shares( transferModel_.transferShare( si )->transfer() ) ) {
-        transferModel_.update( si );
-    } else {
-        transferModel_.remove( si );
+    transferModel_.clear();
+    for( const auto& transfer : account_->transferShares() ) {
+        transferModel_.addTransfer( transfer );
     }
 }

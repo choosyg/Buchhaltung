@@ -63,14 +63,14 @@ QStringList PrintPreviewDialog::buildPages() {
     auto year = ui->comboBox->currentData().toInt();
     QString external;
     for( const auto& account : accounts_ ) {
-        if( account->type() == Account::Type::External ) {
+        if( test( account->flags(), Flags::External ) || test( account->flags(), Flags::Group ) ) {
             external += buildReport( account, year );
         }
     }
 
     QStringList pageContent;
     for( const auto& account : accounts_ ) {
-        if( account->type() == Account::Type::External ) {
+        if( test( account->flags(), Flags::External ) ) {
             continue;
         }
         QString report = external;
