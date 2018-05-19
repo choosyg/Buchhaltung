@@ -46,14 +46,18 @@ QString PrintPreviewDialog::buildReport( const AccountConstPtr& account, int yea
 
     QString report;
     report += "<p><b><u>" + account->name() + "</u></b><br/>";
-    report += "Kontostand am 31.12." + QString::number( year - 1 ) + ": " + formatCents( begin ) + "<br/>";
-
+    report += "Kontostand am 31.12." + QString::number( year - 1 ) + ": " + formatCents( begin );
+    report += "<table>";
     for( const auto& share : account->transferShares() ) {
         if( share->transfer()->date().year() == year ) {
-            report += "\t" + share->transfer()->date().toString( "yyyy-MM-dd" ) + "  "
-                      + share->transfer()->description() + "  " + formatCents( share->cents() ) + "<br/>";
+            report += "<tr>";
+            report += "<td width=90>" + share->transfer()->date().toString( "yyyy-MM-dd" ) + "</td>";
+            report += "<td width=100%>" + share->transfer()->description() + "</td>";
+            report += "<td width=90 align=\"right\">" + formatCents( share->cents() ) + "</td>";
+            report += "</tr>";
         }
     }
+    report += "</table>";
 
     report += "Kontostand am 31.12." + QString::number( year ) + ": " + formatCents( end ) + "<br/></p>";
     return report;
@@ -97,8 +101,24 @@ void PrintPreviewDialog::on_toolButton_clicked() {
         QPainter painter( printer );
         for( const auto& pc : pageContent ) {
             QTextDocument doc;
+
+            const QRect pageRect = printer->pageRect();
+            doc.setPageSize( pageRect.size() );
             doc.setHtml( pc );
-            doc.drawContents( &painter );
+
+            QRect contentRect = QRect( QPoint( 0, 0 ), doc.size().toSize() );
+            QRect currentRect( 0, 0, pageRect.width(), pageRect.height() );
+            while( currentRect.intersects( contentRect ) ) {
+                painter.save();
+                painter.translate( 0, -currentRect.y() );
+                doc.drawContents( &painter, currentRect );
+                painter.restore();
+
+                currentRect.translate( 0, currentRect.height() );
+                if( currentRect.intersects( contentRect ) ) {
+                    printer->newPage();
+                }
+            }
             printer->newPage();
         }
     } );
