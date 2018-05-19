@@ -18,6 +18,9 @@ public:
 
     void accept() override;
 
+private slots:
+    void on_deleteButton_clicked();
+
 private:
     Ui::TransferDialog* ui;
     Model& model_;

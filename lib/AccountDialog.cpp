@@ -24,6 +24,7 @@ AccountDialog::AccountDialog( AccountConstPtr account, Model& model, QWidget* pa
     sortModel_.setSourceModel( &transferModel_ );
     ui->tableView->setModel( &sortModel_ );
     ui->tableView->resizeColumnsToContents();
+    ui->tableView->sortByColumn( 0 );
 }
 
 AccountDialog::~AccountDialog() {

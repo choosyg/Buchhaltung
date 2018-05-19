@@ -17,6 +17,9 @@ public:
     void remove( TransferConstPtr transfer );
     void insert( TransferConstPtr transfer, AccountConstPtr external, AccountConstPtr internal );
 
+    enum class GroupInsertMode { AllIndividual, NonNegativeIndividual };
+    void insert( TransferConstPtr transfer, AccountConstPtr external, GroupInsertMode mode );
+
 private:
     mutable QList< AccountPtr > accounts_;
 };

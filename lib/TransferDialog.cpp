@@ -10,7 +10,8 @@ TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget
     ui->descriptionEdit->setText( transfer->description() );
     ui->amountSpinBox->setValue( transfer->cents() / 100.0 );
 
-    ui->internalAccountBox->addItem( "Gemeinsam", 0 );
+    ui->internalAccountBox->addItem( "Verteilt - Alle", 0 );
+    ui->internalAccountBox->addItem( "Verteilt - Alle mit Guthaben", 1 );
     size_t shareCount = 0;
     size_t externalShareId = 0;
     size_t internalShareId = 0;
@@ -30,7 +31,11 @@ TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget
         }
     }
 
-    ui->externalAccountBox->setCurrentIndex( ui->externalAccountBox->findData( externalShareId ) );
+    if( externalShareId != 0 ) {
+        ui->externalAccountBox->setCurrentIndex( ui->externalAccountBox->findData( externalShareId ) );
+    } else {
+        ui->externalAccountBox->setCurrentIndex( 0 );
+    }
 
     if( shareCount != 1 ) {
         ui->internalAccountBox->setCurrentIndex( ui->internalAccountBox->findData( 0 ) );
@@ -65,11 +70,22 @@ void TransferDialog::accept() {
     }
 
     model_.remove( transfer_ );
-
     auto transfer = std::make_shared< Transfer >( ui->calendarWidget->selectedDate(),
                                                   ui->descriptionEdit->text(),
                                                   round( ui->amountSpinBox->value() * 100.0 ) );
-    model_.insert( transfer, external, internal );
 
+    if( internal != nullptr ) {
+        model_.insert( transfer, external, internal );
+    } else if( ui->internalAccountBox->currentData() == 0 ) {
+        model_.insert( transfer, external, Model::GroupInsertMode::AllIndividual );
+    } else if( ui->internalAccountBox->currentData() == 1 ) {
+        model_.insert( transfer, external, Model::GroupInsertMode::NonNegativeIndividual );
+    }
+
+    QDialog::accept();
+}
+
+void TransferDialog::on_deleteButton_clicked() {
+    model_.remove( transfer_ );
     QDialog::accept();
 }

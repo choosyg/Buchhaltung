@@ -68,7 +68,7 @@ void MainWindow::on_spreadButton_clicked() {
         return;
     }
     auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "Divisionsrest", divisionRest_ );
-    model_.insert( transfer, nullptr, nullptr );
+    model_.insert( transfer, nullptr, Model::GroupInsertMode::AllIndividual );
     updateViews();
 }
 

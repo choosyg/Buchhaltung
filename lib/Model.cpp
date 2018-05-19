@@ -128,29 +128,50 @@ void Model::remove( TransferConstPtr transfer ) {
 }
 
 void Model::insert( TransferConstPtr transfer, AccountConstPtr external, AccountConstPtr internal ) {
-    if( external == nullptr && internal != nullptr ) {
-        throw std::exception( "Model::upsert: Tried to upsert transfer without external reference" );
+    if( external == nullptr ) {
+        throw std::exception( "Model::insert: Tried to insert transfer without external reference" );
     }
+    if( internal == nullptr ) {
+        throw std::exception( "Model::insert: Tried to insert transfer without internal reference" );
+    }
+
     remove( transfer );
 
-    if( external != nullptr ) {
-        for( const auto& account : accounts_ ) {
-            if( account.get() == external.get() ) {
-                account->addTransfer( transfer );
-            }
+    for( const auto& account : accounts_ ) {
+        if( account.get() == external.get() ) {
+            account->addTransfer( transfer );
+        }
+        if( account.get() == internal.get() ) {
+            account->addTransfer( transfer );
+        }
+    }
+}
+
+void Model::insert( TransferConstPtr transfer, AccountConstPtr external, Model::GroupInsertMode mode ) {
+    remove( transfer );
+
+    for( const auto& account : accounts_ ) {
+        if( account.get() == external.get() ) {
+            account->addTransfer( transfer );
         }
     }
 
-    if( internal != nullptr ) {
-        for( const auto& account : accounts_ ) {
-            if( account.get() == internal.get() ) {
-                account->addTransfer( transfer );
-            }
-        }
-    } else {
+    if( mode == GroupInsertMode::AllIndividual ) {
         size_t ic = count( Flags::Internal | Flags::Individual );
         for( const auto& account : accounts_ ) {
             if( test( account->flags(), Flags::Internal | Flags::Individual ) ) {
+                account->addTransfer( transfer, 1.0 / ic );
+            }
+        }
+    } else if( mode == GroupInsertMode::NonNegativeIndividual ) {
+        size_t ic = 0;
+        for( const auto& account : accounts_ ) {
+            if( test( account->flags(), Flags::Internal | Flags::Individual ) && account->balance() >= 0 ) {
+                ++ic;
+            }
+        }
+        for( const auto& account : accounts_ ) {
+            if( test( account->flags(), Flags::Internal | Flags::Individual ) && account->balance() >= 0 ) {
                 account->addTransfer( transfer, 1.0 / ic );
             }
         }
