@@ -45,6 +45,13 @@
       <widget class="QLineEdit" name="descriptionEdit"/>
      </item>
      <item>
+      <widget class="QLineEdit" name="privateEdit">
+       <property name="readOnly">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QDoubleSpinBox" name="amountSpinBox">
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

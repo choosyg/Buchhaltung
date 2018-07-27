@@ -25,6 +25,7 @@ void Model::save( QString filename ) const {
         QJsonObject obj;
         obj["date"] = transfer->date().toString( "yyyy-MM-dd" );
         obj["description"] = transfer->description();
+        obj["private"] = transfer->privateDescription();
         obj["cents"] = transfer->cents();
         obj["id"] = QString::number( reinterpret_cast< size_t >( transfer.get() ) );
         transfers.append( obj );
@@ -74,10 +75,11 @@ void Model::load( QString filename ) {
     QMap< QString, TransferPtr > idToTransfer;
     for( const auto& t : transfers ) {
         QJsonObject obj = t.toObject();
-        idToTransfer[obj["id"].toString()]
-            = std::make_shared< Transfer >( QDate::fromString( obj["date"].toString(), "yyyy-MM-dd" ),
-                                            obj["description"].toString(),
-                                            obj["cents"].toInt() );
+        TransferPtr t = std::make_shared< Transfer >( QDate::fromString( obj["date"].toString(), "yyyy-MM-dd" ),
+                                                      obj["description"].toString(),
+                                                      obj["cents"].toInt() );
+        t->setPrivateDescription( obj["private"].toString() );
+        idToTransfer[obj["id"].toString()] = t;
     }
 
     QJsonArray accounts = document.object()["accounts"].toArray();

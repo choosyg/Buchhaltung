@@ -8,6 +8,7 @@ TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget
 
     ui->calendarWidget->setSelectedDate( transfer->date() );
     ui->descriptionEdit->setText( transfer->description() );
+    ui->privateEdit->setText( transfer->privateDescription() );
     ui->amountSpinBox->setValue( transfer->cents() / 100.0 );
 
     ui->internalAccountBox->addItem( "Verteilt - Alle", 0 );
@@ -73,6 +74,10 @@ void TransferDialog::accept() {
     auto transfer = std::make_shared< Transfer >( ui->calendarWidget->selectedDate(),
                                                   ui->descriptionEdit->text(),
                                                   round( ui->amountSpinBox->value() * 100.0 ) );
+    transfer->setPrivateDescription( ui->privateEdit->text() );
+    if( ui->privateEdit->text().isEmpty() ) {
+        transfer->setPrivateDescription( ui->privateEdit->placeholderText() );
+    }
 
     if( internal != nullptr ) {
         model_.insert( transfer, external, internal );
@@ -88,4 +93,10 @@ void TransferDialog::accept() {
 void TransferDialog::on_deleteButton_clicked() {
     model_.remove( transfer_ );
     QDialog::accept();
+}
+
+void TransferDialog::on_internalAccountBox_currentTextChanged( const QString& text ) {
+    if( ui->internalAccountBox->currentData().toULongLong() > 1 ) {
+        ui->privateEdit->setPlaceholderText( text );
+    }
 }

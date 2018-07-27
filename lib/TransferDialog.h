@@ -21,6 +21,8 @@ public:
 private slots:
     void on_deleteButton_clicked();
 
+    void on_internalAccountBox_currentTextChanged( const QString& text );
+
 private:
     Ui::TransferDialog* ui;
     Model& model_;

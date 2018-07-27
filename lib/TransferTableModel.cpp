@@ -44,9 +44,15 @@ QVariant TransferTableModel::data( const QModelIndex& index, int role ) const {
             case 0:
                 return transfers_[index.row()]->transfer()->date().toString( "yyyy-MM-dd" );
                 break;
-            case 1:
-                return transfers_[index.row()]->transfer()->description();
+            case 1: {
+                TransferConstPtr t = transfers_[index.row()]->transfer();
+                if( t->privateDescription().isEmpty() ) {
+                    return t->description();
+                } else {
+                    return t->description() + " < " + t->privateDescription() + " >";
+                }
                 break;
+            }
             case 2:
                 return formatCents( transfers_[index.row()]->cents() );
                 break;

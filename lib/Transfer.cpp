@@ -27,6 +27,14 @@ void Transfer::setCents( int cents ) {
     cents_ = cents;
 }
 
+const QString& Transfer::privateDescription() const {
+    return privateDescription_;
+}
+
+void Transfer::setPrivateDescription( const QString& privateDescription ) {
+    privateDescription_ = privateDescription;
+}
+
 QString formatCents( int cents ) {
     return QString().sprintf( "%+.2f€", cents / 100.0 );
 }
