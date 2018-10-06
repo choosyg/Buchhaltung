@@ -42,12 +42,19 @@
    <item row="0" column="1">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLineEdit" name="descriptionEdit"/>
+      <widget class="QLineEdit" name="descriptionEdit">
+       <property name="placeholderText">
+        <string>Verwendungszweck</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="privateEdit">
        <property name="readOnly">
         <bool>false</bool>
+       </property>
+       <property name="placeholderText">
+        <string>Private Transfer-Details</string>
        </property>
       </widget>
      </item>

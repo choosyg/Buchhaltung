@@ -20,6 +20,9 @@ public:
     enum class GroupInsertMode { AllIndividual, NonNegativeIndividual };
     void insert( TransferConstPtr transfer, AccountConstPtr external, GroupInsertMode mode );
 
+    const QStringList& completions() const;
+
 private:
     mutable QList< AccountPtr > accounts_;
+    QStringList completions_;
 };

@@ -35,6 +35,7 @@ void Model::save( QString filename ) const {
     for( const auto& account : accounts_ ) {
         QJsonObject a;
         a["name"] = account->name();
+        a["adress"] = account->adress();
         a["flags"] = static_cast< int >( account->flags() );
         QJsonArray shares;
         for( const auto& share : account->transferShares() ) {
@@ -80,13 +81,19 @@ void Model::load( QString filename ) {
                                                       obj["cents"].toInt() );
         t->setPrivateDescription( obj["private"].toString() );
         idToTransfer[obj["id"].toString()] = t;
+
+        completions_.append( obj["description"].toString() );
     }
+    completions_.sort();
+    completions_.removeDuplicates();
 
     QJsonArray accounts = document.object()["accounts"].toArray();
     for( const auto& a : accounts ) {
         QJsonObject obj = a.toObject();
         accounts_.append(
             std::make_shared< Account >( obj["name"].toString(), static_cast< Flags >( obj["flags"].toInt() ) ) );
+        accounts_.back()->setAdress( obj["adress"].toString() );
+
         QJsonArray shares = obj["shares"].toArray();
         for( const auto& s : shares ) {
             QJsonObject share = s.toObject();
@@ -178,4 +185,8 @@ void Model::insert( TransferConstPtr transfer, AccountConstPtr external, Model::
             }
         }
     }
+}
+
+const QStringList& Model::completions() const {
+    return completions_;
 }

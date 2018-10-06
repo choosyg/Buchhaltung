@@ -60,10 +60,10 @@ QVariant AccountOverviewTableModel::data( const QModelIndex& index, int role ) c
     if( role == Qt::TextAlignmentRole ) {
         switch( index.column() ) {
             case 0:
-                return Qt::AlignLeft | Qt::AlignVCenter;
+                return static_cast< int >( Qt::AlignLeft | Qt::AlignVCenter );
                 break;
             case 1:
-                return Qt::AlignRight | Qt::AlignVCenter;
+                return static_cast< int >( Qt::AlignRight | Qt::AlignVCenter );
                 break;
         }
     }

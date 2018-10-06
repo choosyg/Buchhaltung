@@ -1,6 +1,8 @@
 #include "TransferDialog.h"
 #include "ui_TransferDialog.h"
 
+#include <QCompleter>
+
 TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget* parent )
     : QDialog( parent ), ui( new Ui::TransferDialog ), model_( model ), transfer_( transfer ) {
     ui->setupUi( this );
@@ -10,6 +12,9 @@ TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget
     ui->descriptionEdit->setText( transfer->description() );
     ui->privateEdit->setText( transfer->privateDescription() );
     ui->amountSpinBox->setValue( transfer->cents() / 100.0 );
+
+    auto completer = new QCompleter( model.completions(), this );
+    ui->descriptionEdit->setCompleter( completer );
 
     ui->internalAccountBox->addItem( "Verteilt - Alle", 0 );
     ui->internalAccountBox->addItem( "Verteilt - Alle mit Guthaben", 1 );

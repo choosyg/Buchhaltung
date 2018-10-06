@@ -14,6 +14,10 @@ public:
 
     Flags flags() const;
     const QString& name() const;
+    const QString& adress() const;
+
+    void setAdress( const QString& adress );
+    void setName( const QString& name );
 
     void addTransfer( TransferConstPtr transfer, double share = 1.0 );
     void removeTransfer( TransferConstPtr transfer );
@@ -24,6 +28,7 @@ public:
 
 private:
     QString name_;
+    QString adress_;
     Flags flags_;
     std::vector< TransferShareConstPtr > transfers_;
 };

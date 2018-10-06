@@ -53,6 +53,18 @@ bool Account::shares( const TransferConstPtr& transfer ) const {
     return false;
 }
 
+void Account::setAdress( const QString& adress ) {
+    adress_ = adress;
+}
+
+void Account::setName( const QString& name ) {
+    name_ = name;
+}
+
+const QString& Account::adress() const {
+    return adress_;
+}
+
 const QString& Account::name() const {
     return name_;
 }
