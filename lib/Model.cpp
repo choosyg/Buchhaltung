@@ -82,7 +82,7 @@ void Model::load( QString filename ) {
         t->setPrivateDescription( obj["private"].toString() );
         idToTransfer[obj["id"].toString()] = t;
 
-        completions_.append( obj["description"].toString() );
+        completions_.append( t->description() );
     }
     completions_.sort();
     completions_.removeDuplicates();

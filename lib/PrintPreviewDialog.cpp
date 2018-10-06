@@ -45,9 +45,13 @@ QString PrintPreviewDialog::buildReport( const AccountConstPtr& account, int yea
     }
 
     QString report;
-    report += "<p><b><u>" + account->name() + "</u></b><br/>";
-    report += "Kontostand am 31.12." + QString::number( year - 1 ) + ": " + formatCents( begin );
+    report += "<h3>" + account->name() + "</h3><hr/>";
     report += "<table>";
+    report += "<tr>";
+    report += "<td width=90><b>" + QString::number( year - 1 ) + "-12-31</b></td>";
+    report += "<td width=100%><b>Kontostand</b></td>";
+    report += "<td width=90 align=\"right\"><b>" + formatCents( begin ) + "</b></td>";
+    report += "</tr>";
     for( const auto& share : account->transferShares() ) {
         if( share->transfer()->date().year() == year ) {
             report += "<tr>";
@@ -57,9 +61,13 @@ QString PrintPreviewDialog::buildReport( const AccountConstPtr& account, int yea
             report += "</tr>";
         }
     }
-    report += "</table>";
+    report += "<tr>";
+    report += "<td width=90><b>" + QString::number( year ) + "-12-31</b></td>";
+    report += "<td width=100%><b>Kontostand</b></td>";
+    report += "<td width=90 align=\"right\"><b>" + formatCents( end ) + "</b></td>";
+    report += "</tr>";
+    report += "</table><hr/>";
 
-    report += "Kontostand am 31.12." + QString::number( year ) + ": " + formatCents( end ) + "<br/></p>";
     return report;
 }
 
@@ -77,7 +85,8 @@ QStringList PrintPreviewDialog::buildPages() {
         if( test( account->flags(), Flags::External ) ) {
             continue;
         }
-        QString report = external;
+        QString report = account->adress();
+        report += external;
         report += buildReport( account, year );
         pageContent.append( report );
     }
@@ -96,11 +105,12 @@ void PrintPreviewDialog::on_toolButton_clicked() {
     margins.bottom = 20;
     printer.setMargins( margins );
     QPrintPreviewDialog preview( &printer, this );
-    preview.setWindowFlags( preview.windowFlags() & ~Qt::WindowContextHelpButtonHint );
+    preview.setWindowFlags( preview.windowFlags() & ~Qt::WindowContextHelpButtonHint | Qt::WindowMaximizeButtonHint );
     connect( &preview, &QPrintPreviewDialog::paintRequested, this, [&]( QPrinter* printer ) {
         QPainter painter( printer );
         for( const auto& pc : pageContent ) {
             QTextDocument doc;
+            doc.setDefaultStyleSheet( "h3 { margin-bottom: 0;}" );
 
             const QRect pageRect = printer->pageRect();
             doc.setPageSize( pageRect.size() );
