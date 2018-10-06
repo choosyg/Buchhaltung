@@ -14,7 +14,7 @@ AccountDialog::AccountDialog( AccountConstPtr account, Model& model, QWidget* pa
     } else {
         ui->externalRadioButton->setChecked( true );
     }
-    ui->adressEdit->setPlainText( account->adress() );
+    ui->adressEdit->appendHtml( account->adress() );
 
     ui->balanceLabel->setText( formatCents( account->balance() ) );
 
