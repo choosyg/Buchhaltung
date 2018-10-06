@@ -15,9 +15,9 @@ TEST( ModelTest, ShouldUpsertDivisionRest ) {
     model.load( QString( TEST_DATA ) + "/test.json" );
 
     auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "desc", 1000 );
-    model.insert( transfer, nullptr, nullptr );
+    model.insert( transfer, model.accounts().front(), Model::GroupInsertMode::AllIndividual );
     ASSERT_EQ( 999, model.sumBalance( Flags::Internal ) );
-    ASSERT_EQ( 0, model.sumBalance( Flags::External ) );
+    ASSERT_EQ( 1000, model.sumBalance( Flags::External ) );
 }
 
 TEST( ModelTest, ShouldUpsertCommonCosts ) {
@@ -33,7 +33,7 @@ TEST( ModelTest, ShouldUpsertCommonCosts ) {
     }
 
     auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "desc", 1000 );
-    model.insert( transfer, external, nullptr );
+    model.insert( transfer, external, Model::GroupInsertMode::AllIndividual );
     ASSERT_EQ( 999, model.sumBalance( Flags::Internal ) );
     ASSERT_EQ( 1000, model.sumBalance( Flags::External ) );
     ASSERT_EQ( 1000, external->balance() );

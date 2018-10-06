@@ -1,32 +1,37 @@
 {
     "accounts": [
 		{
+			"adress": "",
+            "flags": 10,
 			"name":"Extern1",
-			"type":"External",
 			"shares":[
 			]
 		},
 		{
+			"adress": "",
+            "flags": 10,
 			"name":"Extern2",
-			"type":"External",
 			"shares":[
 			]
 		},
 		{
+			"adress": "",
+            "flags": 9,
 			"name":"Intern1",
-			"type":"Internal",
 			"shares":[
 			]
 		},
 		{
+			"adress": "",
+            "flags": 9,
 			"name":"Intern2",
-			"type":"Internal",
 			"shares":[
 			]
 		},
 		{
+			"adress": "",
+            "flags": 9,
 			"name":"Intern3",
-			"type":"Internal",
 			"shares":[
 			]
 		}
