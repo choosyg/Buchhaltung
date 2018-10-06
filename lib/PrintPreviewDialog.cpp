@@ -85,6 +85,9 @@ QStringList PrintPreviewDialog::buildPages() {
         if( test( account->flags(), Flags::External ) ) {
             continue;
         }
+        if( test( account->flags(), Flags::Group ) ) {
+            continue;
+        }
         QString report = account->adress();
         report += external;
         report += buildReport( account, year );
@@ -129,7 +132,9 @@ void PrintPreviewDialog::on_toolButton_clicked() {
                     printer->newPage();
                 }
             }
-            printer->newPage();
+            if( pc != pageContent.back() ) {
+                printer->newPage();
+            }
         }
     } );
     preview.exec();
