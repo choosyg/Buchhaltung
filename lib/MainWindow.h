@@ -26,6 +26,7 @@ private slots:
 
     void on_spreadButton_clicked();
     void on_newTransferbutton_clicked();
+    void on_newInternalTransferButton_clicked();
 
     void on_printButton_clicked();
 

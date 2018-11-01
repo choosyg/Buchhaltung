@@ -1,6 +1,7 @@
 #include "AccountDialog.h"
 #include "ui_AccountDialog.h"
 
+#include "InternalTransferDialog.h"
 #include "TransferDialog.h"
 
 AccountDialog::AccountDialog( AccountConstPtr account, Model& model, QWidget* parent )
@@ -37,7 +38,30 @@ void AccountDialog::accept() {
 
 void AccountDialog::on_tableView_doubleClicked( const QModelIndex& index ) {
     auto si = sortModel_.mapToSource( index );
-    TransferDialog( transferModel_.transferShare( si )->transfer(), model_, this ).exec();
+    auto transfer = transferModel_.transferShare( si )->transfer();
+
+    auto accounts = model_.accounts();
+    size_t shareCount = 0;
+    double firstShare = 0;
+    double secondShare = 0;
+    for( const auto& account : accounts ) {
+        auto share = account->share( transfer );
+        if( share != 0 ) {
+            ++shareCount;
+            if( shareCount == 1 ) {
+                firstShare = share;
+            }
+            if( shareCount == 2 ) {
+                secondShare = share;
+            }
+        }
+    }
+
+    if( shareCount == 2 && firstShare == -secondShare ) {
+        InternalTransferDialog( transfer, model_, this ).exec();
+    } else {
+        TransferDialog( transfer, model_, this ).exec();
+    }
     transferModel_.clear();
     for( const auto& transfer : account_->transferShares() ) {
         transferModel_.addTransfer( transfer );

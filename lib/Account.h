@@ -25,6 +25,7 @@ public:
 
     const std::vector< TransferShareConstPtr >& transferShares() const;
     bool shares( const TransferConstPtr& transfer ) const;
+    double share( const TransferConstPtr& transfer ) const;
 
 private:
     QString name_;

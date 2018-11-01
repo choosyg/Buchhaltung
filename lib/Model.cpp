@@ -156,6 +156,26 @@ void Model::insert( TransferConstPtr transfer, AccountConstPtr external, Account
     }
 }
 
+void Model::insertInternal( TransferConstPtr transfer, AccountConstPtr source, AccountConstPtr target ) {
+    if( source == nullptr ) {
+        throw std::exception( "Model::insertInternal: Tried to insert transfer without source reference" );
+    }
+    if( target == nullptr ) {
+        throw std::exception( "Model::insertInternal: Tried to insert transfer without target reference" );
+    }
+
+    remove( transfer );
+
+    for( const auto& account : accounts_ ) {
+        if( account.get() == source.get() ) {
+            account->addTransfer( transfer, -1.0 );
+        }
+        if( account.get() == target.get() ) {
+            account->addTransfer( transfer );
+        }
+    }
+}
+
 void Model::insert( TransferConstPtr transfer, AccountConstPtr external, Model::GroupInsertMode mode ) {
     remove( transfer );
 

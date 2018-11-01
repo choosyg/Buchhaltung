@@ -53,6 +53,15 @@ bool Account::shares( const TransferConstPtr& transfer ) const {
     return false;
 }
 
+double Account::share( const TransferConstPtr& transfer ) const {
+    for( const auto& share : transfers_ ) {
+        if( share->transfer().get() == transfer.get() ) {
+            return share->share();
+        }
+    }
+    return 0.0;
+}
+
 void Account::setAdress( const QString& adress ) {
     adress_ = adress;
 }

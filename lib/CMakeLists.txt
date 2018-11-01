@@ -1,5 +1,6 @@
 set( UIS
     AccountDialog.ui
+    InternalTransferDialog.ui
     MainWindow.ui
     PrintPreviewDialog.ui
     TransferDialog.ui
@@ -13,6 +14,8 @@ add_library( buchhaltungLib
     AccountDialog.cpp
     AccountOverviewTableModel.h
     AccountOverviewTableModel.cpp
+    InternalTransferDialog.h
+    InternalTransferDialog.cpp
     MainWindow.h
     MainWindow.cpp
     Model.h

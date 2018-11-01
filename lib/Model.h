@@ -16,6 +16,7 @@ public:
 
     void remove( TransferConstPtr transfer );
     void insert( TransferConstPtr transfer, AccountConstPtr external, AccountConstPtr internal );
+    void insertInternal( TransferConstPtr transfer, AccountConstPtr source, AccountConstPtr target );
 
     enum class GroupInsertMode { AllIndividual, NonNegativeIndividual };
     void insert( TransferConstPtr transfer, AccountConstPtr external, GroupInsertMode mode );

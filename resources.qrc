@@ -6,5 +6,6 @@
         <file>icons/save.svg</file>
         <file>icons/transfer.svg</file>
         <file>icons/money.svg</file>
+        <file>icons/internalTransfer.svg</file>
     </qresource>
 </RCC>

@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 
 #include "AccountDialog.h"
+#include "InternalTransferDialog.h"
 #include "PrintPreviewDialog.h"
 #include "TransferDialog.h"
 
@@ -75,6 +76,12 @@ void MainWindow::on_spreadButton_clicked() {
 void MainWindow::on_newTransferbutton_clicked() {
     auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "", 0 );
     TransferDialog( transfer, model_, this ).exec();
+    updateViews();
+}
+
+void MainWindow::on_newInternalTransferButton_clicked() {
+    auto transfer = std::make_shared< Transfer >( QDate::currentDate(), "", 0 );
+    InternalTransferDialog( transfer, model_, this ).exec();
     updateViews();
 }
 

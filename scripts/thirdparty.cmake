@@ -32,7 +32,7 @@ file( COPY ${QT_DIR}/Qt5PrintSupportd.dll DESTINATION ${PROJECT_BINARY_DIR}/app 
 #############################################################
 # GTest
 #############################################################
-set( GTEST_DIR "${PROJECT_SOURCE_DIR}/../gtest-1.7.0" )
+set( GTEST_DIR "${PROJECT_SOURCE_DIR}/../3rdparty/gtest-1.7.0" )
 include_directories( ${GTEST_DIR}/include )
 link_directories( "${GTEST_DIR}/lib" )
 set( GTEST_LIBS
