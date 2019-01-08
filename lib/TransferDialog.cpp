@@ -3,6 +3,8 @@
 
 #include <QCompleter>
 
+static QString EMPTY_PLACEHOLDER = "Private Transfer Details";
+
 TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget* parent )
     : QDialog( parent ), ui( new Ui::TransferDialog ), model_( model ), transfer_( transfer ) {
     ui->setupUi( this );
@@ -10,6 +12,7 @@ TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget
 
     ui->calendarWidget->setSelectedDate( transfer->date() );
     ui->descriptionEdit->setText( transfer->description() );
+    ui->privateEdit->setPlaceholderText( EMPTY_PLACEHOLDER );
     ui->privateEdit->setText( transfer->privateDescription() );
     ui->amountSpinBox->setValue( transfer->cents() / 100.0 );
 
@@ -80,7 +83,7 @@ void TransferDialog::accept() {
                                                   ui->descriptionEdit->text(),
                                                   round( ui->amountSpinBox->value() * 100.0 ) );
     transfer->setPrivateDescription( ui->privateEdit->text() );
-    if( ui->privateEdit->text().isEmpty() ) {
+    if( ui->privateEdit->text().isEmpty() && ui->privateEdit->placeholderText() != EMPTY_PLACEHOLDER ) {
         transfer->setPrivateDescription( ui->privateEdit->placeholderText() );
     }
 
