@@ -40,6 +40,20 @@ int Account::balance() const {
     return total;
 }
 
+std::pair< int, int > Account::balance( int year ) const {
+    int begin{0};
+    int end{0};
+    for( const auto& share : transfers_ ) {
+        if( share->transfer()->date().year() < year ) {
+            begin += share->cents();
+        }
+        if( share->transfer()->date().year() <= year ) {
+            end += share->cents();
+        }
+    }
+    return std::make_pair( begin, end );
+}
+
 const std::vector< TransferShareConstPtr >& Account::transferShares() const {
     return transfers_;
 }

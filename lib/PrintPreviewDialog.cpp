@@ -33,16 +33,7 @@ void PrintPreviewDialog::on_comboBox_currentIndexChanged( int index ) {
 }
 
 QString PrintPreviewDialog::buildReport( const AccountConstPtr& account, int year ) const {
-    int begin{0};
-    int end{0};
-    for( const auto& share : account->transferShares() ) {
-        if( share->transfer()->date().year() < year ) {
-            begin += share->cents();
-        }
-        if( share->transfer()->date().year() <= year ) {
-            end += share->cents();
-        }
-    }
+    auto balance = account->balance( year );
 
     QString report;
     report += "<h3>" + account->name() + "</h3><hr/>";
@@ -50,9 +41,13 @@ QString PrintPreviewDialog::buildReport( const AccountConstPtr& account, int yea
     report += "<tr>";
     report += "<td width=90><b>" + QString::number( year - 1 ) + "-12-31</b></td>";
     report += "<td width=100%><b>Kontostand</b></td>";
-    report += "<td width=90 align=\"right\"><b>" + formatCents( begin ) + "</b></td>";
+    report += "<td width=90 align=\"right\"><b>" + formatCents( balance.first ) + "</b></td>";
     report += "</tr>";
-    for( const auto& share : account->transferShares() ) {
+    auto shares = account->transferShares();
+    std::sort( shares.begin(), shares.end(), [&]( auto a, auto b ) {
+        return a->transfer()->date() < b->transfer()->date();
+    } );
+    for( const auto& share : shares ) {
         if( share->transfer()->date().year() == year ) {
             report += "<tr>";
             report += "<td width=90>" + share->transfer()->date().toString( "yyyy-MM-dd" ) + "</td>";
@@ -64,18 +59,45 @@ QString PrintPreviewDialog::buildReport( const AccountConstPtr& account, int yea
     report += "<tr>";
     report += "<td width=90><b>" + QString::number( year ) + "-12-31</b></td>";
     report += "<td width=100%><b>Kontostand</b></td>";
-    report += "<td width=90 align=\"right\"><b>" + formatCents( end ) + "</b></td>";
+    report += "<td width=90 align=\"right\"><b>" + formatCents( balance.second ) + "</b></td>";
     report += "</tr>";
-    report += "</table><hr/>";
+    report += "</table><hr/><br/>";
 
     return report;
 }
 
 QStringList PrintPreviewDialog::buildPages() {
     auto year = ui->comboBox->currentData().toInt();
-    QString external;
+    QString external = "<h2>Übersicht Externe Konten</h2>";
+    int sumExtStart = 0;
+    int sumIntStart = 0;
+    int sumExtEnd = 0;
+    int sumIntEnd = 0;
     for( const auto& account : accounts_ ) {
-        if( test( account->flags(), Flags::External ) || test( account->flags(), Flags::Group ) ) {
+        auto balance = account->balance( year );
+        if( test( account->flags(), Flags::External ) ) {
+            external += buildReport( account, year );
+            sumExtStart += balance.first;
+            sumExtEnd += balance.second;
+        } else {
+            sumIntStart += balance.first;
+            sumIntEnd += balance.second;
+        }
+    }
+    external += "<h2>Übersicht Interne Konten</h2>";
+
+    external += "<h4>Kontostand " + QString::number( year - 1 ) + "-12-31</h4><ul>";
+    external += "<li>Summe Externe Konten: " + formatCents( sumExtStart ) + "</li>";
+    external += "<li>Summe Interne Konten: " + formatCents( sumIntStart ) + "</li>";
+    external += "<li>Divisionsrest: " + formatCents( sumExtStart - sumIntStart ) + "</li></ul>";
+
+    external += "<h4>Kontostand " + QString::number( year ) + "-12-31</h4><ul>";
+    external += "<li>Summe Externe Konten: " + formatCents( sumExtEnd ) + "</li>";
+    external += "<li>Summe Interne Konten: " + formatCents( sumIntEnd ) + "</li>";
+    external += "<li>Divisionsrest: " + formatCents( sumExtEnd - sumIntEnd ) + "</li></ul>";
+
+    for( const auto& account : accounts_ ) {
+        if( test( account->flags(), Flags::Group ) ) {
             external += buildReport( account, year );
         }
     }
@@ -88,8 +110,10 @@ QStringList PrintPreviewDialog::buildPages() {
         if( test( account->flags(), Flags::Group ) ) {
             continue;
         }
+
+        pageContent.append( external );
+
         QString report = account->adress();
-        report += external;
         report += buildReport( account, year );
         pageContent.append( report );
     }
@@ -111,6 +135,7 @@ void PrintPreviewDialog::on_toolButton_clicked() {
     preview.setWindowFlags( preview.windowFlags() & ~Qt::WindowContextHelpButtonHint | Qt::WindowMaximizeButtonHint );
     connect( &preview, &QPrintPreviewDialog::paintRequested, this, [&]( QPrinter* printer ) {
         QPainter painter( printer );
+        size_t page = 1;
         for( const auto& pc : pageContent ) {
             QTextDocument doc;
             doc.setDefaultStyleSheet( "h3 { margin-bottom: 0;}" );
@@ -130,10 +155,17 @@ void PrintPreviewDialog::on_toolButton_clicked() {
                 currentRect.translate( 0, currentRect.height() );
                 if( currentRect.intersects( contentRect ) ) {
                     printer->newPage();
+                    ++page;
                 }
+            }
+            // Duplex printing should not start next report on back of last report
+            if( page % 2 != 0 && pc != pageContent.back() ) {
+                printer->newPage();
+                ++page;
             }
             if( pc != pageContent.back() ) {
                 printer->newPage();
+                ++page;
             }
         }
     } );

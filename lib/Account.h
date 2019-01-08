@@ -22,6 +22,7 @@ public:
     void addTransfer( TransferConstPtr transfer, double share = 1.0 );
     void removeTransfer( TransferConstPtr transfer );
     int balance() const;
+    std::pair< int, int > balance( int year ) const;
 
     const std::vector< TransferShareConstPtr >& transferShares() const;
     bool shares( const TransferConstPtr& transfer ) const;
