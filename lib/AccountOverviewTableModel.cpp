@@ -27,11 +27,11 @@ AccountConstPtr AccountOverviewTableModel::account( const QModelIndex& index ) c
     return overviews_[index.row()].account;
 }
 
-int AccountOverviewTableModel::rowCount( const QModelIndex& parent ) const {
+int AccountOverviewTableModel::rowCount( const QModelIndex& ) const {
     return overviews_.size();
 }
 
-int AccountOverviewTableModel::columnCount( const QModelIndex& parent ) const {
+int AccountOverviewTableModel::columnCount( const QModelIndex& ) const {
     return 2;
 }
 
@@ -44,10 +44,8 @@ QVariant AccountOverviewTableModel::data( const QModelIndex& index, int role ) c
         switch( index.column() ) {
             case 0:
                 return overviews_[index.row()].name;
-                break;
             case 1:
                 return overviews_[index.row()].balanceString;
-                break;
         }
     }
 
@@ -55,16 +53,17 @@ QVariant AccountOverviewTableModel::data( const QModelIndex& index, int role ) c
         if( overviews_[index.row()].balance < 0 ) {
             return QColor( Qt::red );
         }
+        if( test( overviews_[index.row()].account->flags(), Flags::Closed ) ) {
+            return QColor( Qt::gray );
+        }
     }
 
     if( role == Qt::TextAlignmentRole ) {
         switch( index.column() ) {
             case 0:
                 return static_cast< int >( Qt::AlignLeft | Qt::AlignVCenter );
-                break;
             case 1:
                 return static_cast< int >( Qt::AlignRight | Qt::AlignVCenter );
-                break;
         }
     }
     return QVariant();
@@ -79,10 +78,8 @@ QVariant AccountOverviewTableModel::headerData( int section, Qt::Orientation ori
         switch( section ) {
             case 0:
                 return "Name";
-                break;
             case 1:
                 return "Kontostand";
-                break;
         }
     }
 

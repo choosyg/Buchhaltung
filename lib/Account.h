@@ -4,7 +4,7 @@
 
 #include <vector>
 
-enum class Flags { Internal = 1, External = 2, Group = 4, Individual = 8 };
+enum class Flags { Internal = 1, External = 2, Group = 4, Individual = 8, Closed = 16 };
 Flags operator|( Flags a, Flags b );
 bool test( Flags flags, Flags contained );
 

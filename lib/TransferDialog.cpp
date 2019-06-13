@@ -27,9 +27,11 @@ TransferDialog::TransferDialog( TransferConstPtr transfer, Model& model, QWidget
     for( const auto& account : model.accounts() ) {
         auto id = reinterpret_cast< size_t >( account.get() );
         if( test( account->flags(), Flags::External ) ) {
-            ui->externalAccountBox->addItem( account->name(), id );
-            if( account->shares( transfer ) ) {
-                externalShareId = id;
+            if( !test(account->flags(), Flags::Closed ) ){
+                ui->externalAccountBox->addItem( account->name(), id );
+                if( account->shares( transfer ) ) {
+                    externalShareId = id;
+                }
             }
         } else {
             ui->internalAccountBox->addItem( account->name(), id );
