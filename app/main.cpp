@@ -1,6 +1,6 @@
 #include <qglobal.h>
 
-#include <lib/MainWindow.h>
+#include <widgets/MainWindow.h>
 
 #include <QApplication>
 

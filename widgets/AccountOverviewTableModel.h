@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Account.h"
+#include <core/Account.h>
 
 #include <QAbstractTableModel>
 

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Account.h"
 #include "Model.h"
 #include "TransferTableModel.h"
+
+#include <core/Account.h>
 
 #include <QDialog>
 #include <QSortFilterProxyModel>
@@ -15,8 +16,8 @@ class AccountDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AccountDialog( AccountConstPtr account, Model& model, QWidget* parent = 0 );
-    ~AccountDialog();
+    explicit AccountDialog( AccountConstPtr account, Model& model, QWidget* parent = nullptr );
+    ~AccountDialog() override;
 
     void accept() override;
 

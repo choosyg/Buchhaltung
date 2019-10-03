@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Model.h"
-#include "Transfer.h"
+
+#include <core/Transfer.h>
 
 #include <QDialog>
 
@@ -13,8 +14,8 @@ class InternalTransferDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit InternalTransferDialog( TransferConstPtr transfer, Model& model, QWidget* parent = 0 );
-    ~InternalTransferDialog();
+    explicit InternalTransferDialog( TransferConstPtr transfer, Model& model, QWidget* parent = nullptr );
+    ~InternalTransferDialog() override;
 
     void accept() override;
 

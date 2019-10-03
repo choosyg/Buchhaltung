@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TransferShare.h"
+#include <core/TransferShare.h>
 
 #include <QAbstractTableModel>
 

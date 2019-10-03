@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Account.h"
+#include <core/Account.h>
 
 #include <QDialog>
 
@@ -11,8 +11,8 @@ class PrintPreviewDialog;
 class PrintPreviewDialog : public QDialog {
     Q_OBJECT
 public:
-    explicit PrintPreviewDialog( const QList< AccountConstPtr >& accounts, QWidget* parent = 0 );
-    ~PrintPreviewDialog();
+    explicit PrintPreviewDialog( const QList< AccountConstPtr >& accounts, QWidget* parent = nullptr );
+    ~PrintPreviewDialog() override;
 
 private slots:
     void on_comboBox_currentIndexChanged( int index );

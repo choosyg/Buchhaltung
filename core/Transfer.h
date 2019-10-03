@@ -18,7 +18,6 @@ public:
     void setPrivateDescription( const QString& privateDescription );
     void setCents( int cents );
 
-
 private:
     QDate date_;
     QString description_;

@@ -19,7 +19,8 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 include_directories("${Buchhaltung_SOURCE_DIR}")
 
-add_subdirectory( lib )
+add_subdirectory( core )
+add_subdirectory( widgets )
 add_subdirectory( app )
 
 set(CPACK_GENERATOR "ZIP")
