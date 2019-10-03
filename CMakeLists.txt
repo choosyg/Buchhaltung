@@ -1,11 +1,15 @@
 cmake_minimum_required (VERSION 3.9.0)
 project( Buchhaltung )
 
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 set( Buchhaltung_VERSION_MAJOR 1 )
 set( Buchhaltung_VERSION_MINOR 0 )
 set( Buchhaltung_VERSION_PATCH 0 )
 
 include( scripts/thirdparty.cmake )
+
 include(CTest)
 enable_testing()
 
@@ -13,7 +17,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
-
 include_directories("${Buchhaltung_SOURCE_DIR}")
 
 add_subdirectory( lib )

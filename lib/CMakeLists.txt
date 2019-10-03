@@ -7,7 +7,7 @@ set( UIS
 )
 set_source_files_properties(${UIS} PROPERTIES HEADER_FILE_ONLY TRUE)
 
-add_library( buchhaltungLib
+set( SOURCES
     Account.h
     Account.cpp
     AccountDialog.h
@@ -30,23 +30,31 @@ add_library( buchhaltungLib
     TransferShare.cpp
     TransferTableModel.h
     TransferTableModel.cpp
-    ${UIS}
-    )
-target_compile_definitions( buchhaltungLib PRIVATE _WIN32_WINNT=0x0501)
+)
+
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+add_library( buchhaltung SHARED ${SOURCES} ${UIS} )
+target_compile_definitions( buchhaltung PUBLIC _WIN32_WINNT=0x0501 )
+target_link_libraries( buchhaltung PUBLIC
+    Qt5::Widgets
+    Qt5::Core
+    Qt5::Gui
+    Qt5::PrintSupport
+)
+install(TARGETS buchhaltung RUNTIME DESTINATION .)
 
 add_executable( buchhaltungTest
     Account.test.cpp
     Model.test.cpp
     TransferShare.test.cpp
-    )
+)
 target_link_libraries( buchhaltungTest
-    buchhaltungLib
-    Qt5::Widgets
-    Qt5::Core
-    Qt5::Gui
+    buchhaltung
     ${GTEST_LIBS}
 )
-target_compile_definitions( buchhaltungTest PRIVATE _WIN32_WINNT=0x0501)
-target_compile_definitions (buchhaltungTest PRIVATE TEST_DATA="${CMAKE_SOURCE_DIR}/testdata")
-add_test(NAME buchhaltungTest COMMAND ${CMAKE_BINARY_DIR}/app/buchhaltungTest )
+# GTest throws tons of C4996 LNK4099 - Disable it
+target_compile_options( buchhaltungTest PRIVATE "/wd4996" )
+target_link_options( buchhaltungTest PRIVATE "/ignore:4099" )
+target_compile_definitions( buchhaltungTest PRIVATE TEST_DATA="${CMAKE_SOURCE_DIR}/testdata" )
+add_test( NAME buchhaltungTest COMMAND ${CMAKE_BINARY_DIR}/app/buchhaltungTest )
 

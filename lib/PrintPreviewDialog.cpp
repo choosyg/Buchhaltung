@@ -75,6 +75,12 @@ QStringList PrintPreviewDialog::buildPages() {
     int sumIntEnd = 0;
     for( const auto& account : accounts_ ) {
         auto balance = account->balance( year );
+
+        //Account closed, has not changed and was empty for selected year -> ignore for reporting
+        if( test( account->flags(), Flags::Closed ) && balance.first == balance.second && balance.second == 0 ){
+            continue;
+        }
+
         if( test( account->flags(), Flags::External ) ) {
             external += buildReport( account, year );
             sumExtStart += balance.first;

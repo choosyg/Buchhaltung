@@ -13,21 +13,29 @@ find_package(Qt5PrintSupport REQUIRED)
 include_directories(${Qt5PrintSupport_INCLUDE_DIRS})
 
 get_filename_component(QT_DIR ${QT_QMAKE_EXECUTABLE} DIRECTORY)
-install( FILES ${QT_DIR}/Qt5Core.dll
-               ${QT_DIR}/Qt5Widgets.dll
-               ${QT_DIR}/Qt5Gui.dll DESTINATION . )
-install( FILES ${QT_DIR}/../plugins/platforms/qwindows.dll DESTINATION ./platforms )
-file( COPY ${QT_DIR}/Qt5Core.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
-file( COPY ${QT_DIR}/Qt5Widgets.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
-file( COPY ${QT_DIR}/Qt5Gui.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
-file( COPY ${QT_DIR}/Qt5Svg.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
-file( COPY ${QT_DIR}/Qt5PrintSupport.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
+set( QT_INSTALL_DLLS
+    ${QT_DIR}/Qt5Core.dll
+    ${QT_DIR}/Qt5Widgets.dll
+    ${QT_DIR}/Qt5Gui.dll
+    ${QT_DIR}/Qt5Svg.dll
+    ${QT_DIR}/Qt5PrintSupport.dll
+)
 
-file( COPY ${QT_DIR}/Qt5Cored.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
-file( COPY ${QT_DIR}/Qt5Widgetsd.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
-file( COPY ${QT_DIR}/Qt5Guid.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
-file( COPY ${QT_DIR}/Qt5Svgd.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
-file( COPY ${QT_DIR}/Qt5PrintSupportd.dll DESTINATION ${PROJECT_BINARY_DIR}/app )
+set( QT_INSTALL_PLUGINS
+    ${QT_DIR}/../plugins/platforms/qwindows.dll
+)
+
+install( FILES ${QT_INSTALL_DLLS} DESTINATION . )
+install( FILES ${QT_INSTALL_PLUGINS} DESTINATION ./platforms )
+
+file( COPY ${QT_INSTALL_DLLS} DESTINATION ${PROJECT_BINARY_DIR} )
+file( COPY ${QT_INSTALL_PLUGINS} DESTINATION ${PROJECT_BINARY_DIR}/platforms )
+
+file( COPY ${QT_DIR}/Qt5Cored.dll DESTINATION ${PROJECT_BINARY_DIR} )
+file( COPY ${QT_DIR}/Qt5Widgetsd.dll DESTINATION ${PROJECT_BINARY_DIR} )
+file( COPY ${QT_DIR}/Qt5Guid.dll DESTINATION ${PROJECT_BINARY_DIR} )
+file( COPY ${QT_DIR}/Qt5Svgd.dll DESTINATION ${PROJECT_BINARY_DIR} )
+file( COPY ${QT_DIR}/Qt5PrintSupportd.dll DESTINATION ${PROJECT_BINARY_DIR} )
 
 #############################################################
 # GTest

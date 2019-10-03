@@ -26,11 +26,11 @@ void TransferTableModel::remove( const QModelIndex& index ) {
     endResetModel();
 }
 
-int TransferTableModel::rowCount( const QModelIndex& parent ) const {
+int TransferTableModel::rowCount( const QModelIndex& ) const {
     return transfers_.size();
 }
 
-int TransferTableModel::columnCount( const QModelIndex& parent ) const {
+int TransferTableModel::columnCount( const QModelIndex& ) const {
     return 3;
 }
 
@@ -43,7 +43,6 @@ QVariant TransferTableModel::data( const QModelIndex& index, int role ) const {
         switch( index.column() ) {
             case 0:
                 return transfers_[index.row()]->transfer()->date().toString( "yyyy-MM-dd" );
-                break;
             case 1: {
                 TransferConstPtr t = transfers_[index.row()]->transfer();
                 if( t->privateDescription().isEmpty() ) {
@@ -51,11 +50,9 @@ QVariant TransferTableModel::data( const QModelIndex& index, int role ) const {
                 } else {
                     return t->description() + " < " + t->privateDescription() + " >";
                 }
-                break;
             }
             case 2:
                 return formatCents( transfers_[index.row()]->cents() );
-                break;
         }
     }
 
@@ -63,27 +60,21 @@ QVariant TransferTableModel::data( const QModelIndex& index, int role ) const {
         switch( index.column() ) {
             case 0:
                 return transfers_[index.row()]->transfer()->date();
-                break;
             case 1:
                 return transfers_[index.row()]->transfer()->description();
-                break;
             case 2:
                 return transfers_[index.row()]->cents() / 100.0;
-                break;
         }
     }
 
     if( role == Qt::TextAlignmentRole ) {
         switch( index.column() ) {
             case 0:
-                return Qt::AlignLeft | Qt::AlignVCenter;
-                break;
+                return Qt::AlignLeft;
             case 1:
-                return Qt::AlignLeft | Qt::AlignVCenter;
-                break;
+                return Qt::AlignLeft;
             case 2:
-                return Qt::AlignRight | Qt::AlignVCenter;
-                break;
+                return Qt::AlignRight;
         }
     }
     return QVariant();
@@ -98,13 +89,10 @@ QVariant TransferTableModel::headerData( int section, Qt::Orientation orientatio
         switch( section ) {
             case 0:
                 return "Datum";
-                break;
             case 1:
                 return "Verwendungszweck";
-                break;
             case 2:
                 return "Betrag";
-                break;
         }
     }
 
