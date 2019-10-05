@@ -13,10 +13,8 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: true
 IncludeCategories:
   - Regex:           '^\"((?!\/).)*\"$'
     Priority:        1
-  - Regex:           '^(\"scils\/.*\")|(\<scils\/.*\>)$'
-    Priority:        2
   - Regex:           '^(\<.*\/.*\>)$'
-    Priority:        3
+    Priority:        2
 IndentCaseLabels: true
 IndentWidth: 4
 Language: Cpp
