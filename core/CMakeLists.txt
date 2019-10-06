@@ -7,13 +7,13 @@ set( SOURCES
     TransferShare.cpp
 )
 
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+set( CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON )
 add_library( AccountingCore SHARED ${SOURCES} )
 target_compile_definitions( AccountingCore PUBLIC _WIN32_WINNT=0x0501 )
 target_link_libraries( AccountingCore PUBLIC
     Qt5::Core
 )
-install(TARGETS AccountingCore RUNTIME DESTINATION .)
+install( TARGETS AccountingCore RUNTIME DESTINATION . )
 
 add_executable( AccountingCoreTest
     Account.test.cpp
