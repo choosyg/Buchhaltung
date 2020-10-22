@@ -14,11 +14,50 @@
 MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::MainWindow ) {
     ui->setupUi( this );
 
+    externalSortModel_.setSortRole( Qt::EditRole );
     externalSortModel_.setSourceModel( &externalOverviewTableModel_ );
     ui->externalOverviewTable->setModel( &externalSortModel_ );
 
+    internalSortModel_.setSortRole( Qt::EditRole );
     internalSortModel_.setSourceModel( &internalOverviewTableModel_ );
     ui->internalOverviewTable->setModel( &internalSortModel_ );
+
+    setStyleSheet( "QToolButton { "
+                   "border: none;"
+                   "padding: 2px;"
+                   "}"
+                   "QToolButton:hover { "
+                   "border: 1px solid #8f8f91;"
+                   "border-radius: 3px;"
+                   "padding: 1px;"
+                   "}"
+                   "QToolButton:checked { "
+                   "border: 1px solid #8f8f91;"
+                   "border-radius: 3px;"
+                   "padding: 1px;"
+                   "background-color: #cccccc;"
+                   "}"
+                   "QToolButton:pressed { "
+                   "border: 1px solid #8f8f91;"
+                   "border-radius: 3px;"
+                   "padding: 1px;"
+                   "background-color: #cccccc;"
+                   "}"
+                   "QAbstractItemView {"
+                   "  alternate-background-color: #f5faff;"
+                   "}"
+                   "QHeaderView {"
+                   "  background-color: white;"
+                   "}"
+                   "QHeaderView::section {"
+                   "  border: none;"
+                   "  border-right: 1px solid #cccccc;"
+                   "  background-color: white;"
+                   "}"
+                   "QAbstractItemView:item:selected {"
+                   "  color: black;"
+                   "  background-color:#cde8ff;"
+                   "}" );
 }
 
 MainWindow::~MainWindow() {
@@ -111,5 +150,7 @@ void MainWindow::updateViews() {
     ui->numberInternalLabel->setText( QString::number( internalOverviewTableModel_.rowCount( QModelIndex() ) ) );
 
     ui->externalOverviewTable->resizeColumnsToContents();
+    ui->externalOverviewTable->sortByColumn( 0, Qt::AscendingOrder );
     ui->internalOverviewTable->resizeColumnsToContents();
+    ui->internalOverviewTable->sortByColumn( 0, Qt::AscendingOrder );
 }

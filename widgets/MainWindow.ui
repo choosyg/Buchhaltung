@@ -225,6 +225,9 @@
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>150</number>
           </attribute>
+          <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+           <bool>false</bool>
+          </attribute>
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>true</bool>
           </attribute>
@@ -324,6 +327,9 @@
           </attribute>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>150</number>
+          </attribute>
+          <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+           <bool>false</bool>
           </attribute>
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>true</bool>

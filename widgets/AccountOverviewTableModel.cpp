@@ -49,6 +49,15 @@ QVariant AccountOverviewTableModel::data( const QModelIndex& index, int role ) c
         }
     }
 
+    if( role == Qt::EditRole ) {
+        switch( index.column() ) {
+            case 0:
+                return overviews_[index.row()].name;
+            case 1:
+                return overviews_[index.row()].balance;
+        }
+    }
+
     if( role == Qt::ForegroundRole ) {
         if( overviews_[index.row()].balance < 0 ) {
             return QColor( Qt::red );

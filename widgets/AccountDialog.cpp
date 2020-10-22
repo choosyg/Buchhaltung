@@ -5,7 +5,7 @@
 #include "TransferDialog.h"
 
 AccountDialog::AccountDialog( AccountConstPtr account, Model& model, QWidget* parent )
-    : QDialog( parent ), ui( new Ui::AccountDialog ), model_( model ), account_( account ) {
+    : QDialog( parent ), ui( new Ui::AccountDialog ), account_( account ), model_( model ) {
     ui->setupUi( this );
     setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
 
@@ -26,11 +26,13 @@ AccountDialog::AccountDialog( AccountConstPtr account, Model& model, QWidget* pa
     sortModel_.setFilterRole( Qt::DisplayRole );
     sortModel_.setFilterKeyColumn( 1 );
     sortModel_.setFilterCaseSensitivity( Qt::CaseInsensitive );
+    sortModel_.setSortRole( Qt::EditRole );
     sortModel_.setSourceModel( &transferModel_ );
 
     ui->tableView->setModel( &sortModel_ );
     ui->tableView->resizeColumnsToContents();
-    ui->tableView->sortByColumn( 0 );
+    ui->tableView->sortByColumn( 0, Qt::AscendingOrder ); // Default was descending, will not resort is not toggled
+    ui->tableView->sortByColumn( 0, Qt::DescendingOrder );
 }
 
 AccountDialog::~AccountDialog() {
@@ -67,8 +69,8 @@ void AccountDialog::on_tableView_doubleClicked( const QModelIndex& index ) {
         TransferDialog( transfer, model_, this ).exec();
     }
     transferModel_.clear();
-    for( const auto& transfer : account_->transferShares() ) {
-        transferModel_.addTransfer( transfer );
+    for( const auto& t : account_->transferShares() ) {
+        transferModel_.addTransfer( t );
     }
 }
 
