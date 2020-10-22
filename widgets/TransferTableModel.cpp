@@ -70,11 +70,11 @@ QVariant TransferTableModel::data( const QModelIndex& index, int role ) const {
     if( role == Qt::TextAlignmentRole ) {
         switch( index.column() ) {
             case 0:
-                return Qt::AlignLeft;
+                return Qt::AlignLeft | Qt::AlignVCenter;
             case 1:
-                return Qt::AlignLeft;
+                return Qt::AlignLeft | Qt::AlignVCenter;
             case 2:
-                return Qt::AlignRight;
+                return Qt::AlignRight | Qt::AlignVCenter;
         }
     }
     return QVariant();

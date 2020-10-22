@@ -121,6 +121,13 @@
     </layout>
    </item>
    <item>
+    <widget class="QLineEdit" name="FilterLineEdit">
+     <property name="placeholderText">
+      <string>Search</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QTableView" name="tableView">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -152,11 +159,11 @@
      <attribute name="verticalHeaderVisible">
       <bool>false</bool>
      </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>25</number>
-     </attribute>
      <attribute name="verticalHeaderMinimumSectionSize">
       <number>20</number>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>25</number>
      </attribute>
     </widget>
    </item>

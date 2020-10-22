@@ -92,13 +92,6 @@
        </widget>
       </item>
       <item>
-       <widget class="Line" name="line_3">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QToolButton" name="newTransferbutton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -226,11 +219,11 @@
           <property name="sortingEnabled">
            <bool>true</bool>
           </property>
-          <attribute name="horizontalHeaderDefaultSectionSize">
-           <number>150</number>
-          </attribute>
           <attribute name="horizontalHeaderMinimumSectionSize">
            <number>100</number>
+          </attribute>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>150</number>
           </attribute>
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>true</bool>
@@ -238,10 +231,10 @@
           <attribute name="verticalHeaderVisible">
            <bool>false</bool>
           </attribute>
-          <attribute name="verticalHeaderDefaultSectionSize">
+          <attribute name="verticalHeaderMinimumSectionSize">
            <number>25</number>
           </attribute>
-          <attribute name="verticalHeaderMinimumSectionSize">
+          <attribute name="verticalHeaderDefaultSectionSize">
            <number>25</number>
           </attribute>
          </widget>
@@ -326,11 +319,11 @@
           <property name="sortingEnabled">
            <bool>true</bool>
           </property>
-          <attribute name="horizontalHeaderDefaultSectionSize">
-           <number>150</number>
-          </attribute>
           <attribute name="horizontalHeaderMinimumSectionSize">
            <number>100</number>
+          </attribute>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>150</number>
           </attribute>
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>true</bool>
@@ -338,10 +331,10 @@
           <attribute name="verticalHeaderVisible">
            <bool>false</bool>
           </attribute>
-          <attribute name="verticalHeaderDefaultSectionSize">
+          <attribute name="verticalHeaderMinimumSectionSize">
            <number>25</number>
           </attribute>
-          <attribute name="verticalHeaderMinimumSectionSize">
+          <attribute name="verticalHeaderDefaultSectionSize">
            <number>25</number>
           </attribute>
          </widget>

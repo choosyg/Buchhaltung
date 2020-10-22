@@ -23,7 +23,11 @@ AccountDialog::AccountDialog( AccountConstPtr account, Model& model, QWidget* pa
         transferModel_.addTransfer( transfer );
     }
 
+    sortModel_.setFilterRole( Qt::DisplayRole );
+    sortModel_.setFilterKeyColumn( 1 );
+    sortModel_.setFilterCaseSensitivity( Qt::CaseInsensitive );
     sortModel_.setSourceModel( &transferModel_ );
+
     ui->tableView->setModel( &sortModel_ );
     ui->tableView->resizeColumnsToContents();
     ui->tableView->sortByColumn( 0 );
@@ -66,4 +70,8 @@ void AccountDialog::on_tableView_doubleClicked( const QModelIndex& index ) {
     for( const auto& transfer : account_->transferShares() ) {
         transferModel_.addTransfer( transfer );
     }
+}
+
+void AccountDialog::on_FilterLineEdit_textChanged( const QString& str ) {
+    sortModel_.setFilterFixedString( str );
 }
