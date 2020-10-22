@@ -60,8 +60,14 @@ QVariant TransferTableModel::data( const QModelIndex& index, int role ) const {
         switch( index.column() ) {
             case 0:
                 return transfers_[index.row()]->transfer()->date();
-            case 1:
-                return transfers_[index.row()]->transfer()->description();
+            case 1: {
+                TransferConstPtr t = transfers_[index.row()]->transfer();
+                if( t->privateDescription().isEmpty() ) {
+                    return t->description();
+                } else {
+                    return t->description() + " < " + t->privateDescription() + " >";
+                }
+            }
             case 2:
                 return transfers_[index.row()]->cents() / 100.0;
         }
